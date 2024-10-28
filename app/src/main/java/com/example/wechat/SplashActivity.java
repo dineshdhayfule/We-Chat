@@ -1,17 +1,9 @@
 package com.example.wechat;
 
-import static android.os.Build.VERSION_CODES.R;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.RelativeLayout;
-
-import com.example.wechat.Models.Users;
-import com.example.wechat.databinding.ActivityChatDetailBinding;
 import com.example.wechat.databinding.ActivitySplashBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,7 +33,6 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
                         finish();
                     }
-
                 }
             }, 1000);
         }
