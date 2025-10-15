@@ -36,11 +36,16 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
         this.context = context;
     }
 
+    public GroupChatAdapter(ArrayList<MessageModel> messageModels, Context context, boolean isObjectList) {
+        this.chatItems = new ArrayList<>(messageModels);
+        this.context = context;
+    }
+
     @Override
     public int getItemViewType(int position) {
         Object item = chatItems.get(position);
         if (item instanceof MessageModel) {
-            if (((MessageModel) item).getuId().equals(FirebaseAuth.getInstance().getUid())) {
+            if (((MessageModel) item).getuId() != null && ((MessageModel) item).getuId().equals(FirebaseAuth.getInstance().getUid())) {
                 return VIEW_TYPE_SENDER;
             } else {
                 return VIEW_TYPE_RECEIVER;
@@ -83,19 +88,24 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
                 reciverViewHolder.reciverMsg.setText(message.getMessage());
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
 
-                FirebaseDatabase.getInstance().getReference().child("Users").child(message.getuId())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    Users user = snapshot.getValue(Users.class);
-                                    reciverViewHolder.senderName.setText(user.getUserName());
+                if (message.getuId() != null) {
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(message.getuId())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        Users user = snapshot.getValue(Users.class);
+                                        if (user != null) {
+                                            reciverViewHolder.senderName.setText(user.getUserName());
+                                        }
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                }
             }
 
             holder.itemView.setOnClickListener(v -> {

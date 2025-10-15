@@ -50,8 +50,6 @@ public class GroupChatActivity extends AppCompatActivity {
         final GroupChatAdapter chatAdapter = new GroupChatAdapter(chatItems, this);
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
-        final String senderId = FirebaseAuth.getInstance().getUid();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
 
@@ -63,13 +61,15 @@ public class GroupChatActivity extends AppCompatActivity {
                         long lastTimestamp = 0;
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             MessageModel model = snapshot1.getValue(MessageModel.class);
-                            model.setMessageId(snapshot1.getKey());
+                            if (model != null) {
+                                model.setMessageId(snapshot1.getKey());
 
-                            if (!isSameDay(lastTimestamp, model.getTimeStamp())) {
-                                chatItems.add(getFormattedDate(model.getTimeStamp()));
+                                if (!isSameDay(lastTimestamp, model.getTimeStamp())) {
+                                    chatItems.add(getFormattedDate(model.getTimeStamp()));
+                                }
+                                chatItems.add(model);
+                                lastTimestamp = model.getTimeStamp();
                             }
-                            chatItems.add(model);
-                            lastTimestamp = model.getTimeStamp();
                         }
                         chatAdapter.notifyDataSetChanged();
                     }
@@ -94,7 +94,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 final String message = binding.enterMessage.getText().toString();
                 if (message.isEmpty() || message.equals("") || message == "") {
                 } else {
-                    final MessageModel model = new MessageModel(senderId, message);
+                    final MessageModel model = new MessageModel(FirebaseAuth.getInstance().getUid(), message);
                     model.setTimeStamp(new Date().getTime());
                     binding.enterMessage.setText("");
                     database.getReference().child("Group Chat")

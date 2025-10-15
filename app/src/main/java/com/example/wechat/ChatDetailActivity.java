@@ -1,7 +1,5 @@
 package com.example.wechat;
 
-import static android.os.Build.VERSION_CODES.R;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,10 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
 import com.example.wechat.Adapter.ChatAdapter;
 import com.example.wechat.Models.MessageModel;
-import com.example.wechat.Models.Users;
 import com.example.wechat.databinding.ActivityChatDetailBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,21 +17,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Request;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.Locale;
 
 public class ChatDetailActivity extends AppCompatActivity {
 
@@ -59,7 +47,6 @@ public class ChatDetailActivity extends AppCompatActivity {
         String profilePic = getIntent().getStringExtra("profilePic");
 
         binding.userName.setText(userName);
-//        Picasso.get().load(profilePic).placeholder(R.drawable.avatar3).into(binding.profileImage);
         try {
             Picasso.get().load(profilePic).into(binding.profileImage);
         } catch (Exception e) {
@@ -73,8 +60,9 @@ public class ChatDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        final ArrayList<MessageModel> messageModels = new ArrayList<>();
-        final ChatAdapter chatAdapter = new ChatAdapter(messageModels, this, recieveId);
+
+        final ArrayList<Object> chatItems = new ArrayList<>();
+        final ChatAdapter chatAdapter = new ChatAdapter(chatItems, this, recieveId);
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
@@ -89,12 +77,17 @@ public class ChatDetailActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        messageModels.clear();
+                        chatItems.clear();
+                        long lastTimestamp = 0;
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             MessageModel model = snapshot1.getValue(MessageModel.class);
                             model.setMessageId(snapshot1.getKey());
-                            messageModels.add(model);
 
+                            if (!isSameDay(lastTimestamp, model.getTimeStamp())) {
+                                chatItems.add(getFormattedDate(model.getTimeStamp()));
+                            }
+                            chatItems.add(model);
+                            lastTimestamp = model.getTimeStamp();
                         }
                         chatAdapter.notifyDataSetChanged();
                     }
@@ -105,15 +98,6 @@ public class ChatDetailActivity extends AppCompatActivity {
                     }
                 });
 
-        binding.changeWallpaper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//               String images[]={R.drawable.bp,R.drawable.dp,R.drawable.avg};
-//                binding.RelativeLayout.setBackgroundResource(R.drawable.w01);
-                Intent intent = new Intent(ChatDetailActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +120,6 @@ public class ChatDetailActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void unused) {
 
-
                                                 }
                                             });
                                 }
@@ -146,4 +129,19 @@ public class ChatDetailActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isSameDay(long timestamp1, long timestamp2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(timestamp1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTimeInMillis(timestamp2);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    private String getFormattedDate(long timestamp) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timestamp);
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        return formatter.format(cal.getTime());
+    }
 }

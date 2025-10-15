@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -31,9 +30,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final LinearLayout linear;
 
   @NonNull
-  public final LinearLayout linearLayout2;
-
-  @NonNull
   public final ImageView plus;
 
   @NonNull
@@ -43,44 +39,21 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final AppCompatButton saveButton;
 
   @NonNull
-  public final TextView textView2;
-
-  @NonNull
-  public final TextView textView3;
-
-  @NonNull
-  public final TextView textView4;
-
-  @NonNull
-  public final TextView textView5;
-
-  @NonNull
-  public final TextView textView6;
-
-  @NonNull
   public final EditText txtStatus;
 
   @NonNull
   public final EditText txtUserName;
 
   private ActivitySettingsBinding(@NonNull RelativeLayout rootView, @NonNull ImageView backArrow,
-      @NonNull LinearLayout linear, @NonNull LinearLayout linearLayout2, @NonNull ImageView plus,
-      @NonNull CircleImageView profileImage, @NonNull AppCompatButton saveButton,
-      @NonNull TextView textView2, @NonNull TextView textView3, @NonNull TextView textView4,
-      @NonNull TextView textView5, @NonNull TextView textView6, @NonNull EditText txtStatus,
+      @NonNull LinearLayout linear, @NonNull ImageView plus, @NonNull CircleImageView profileImage,
+      @NonNull AppCompatButton saveButton, @NonNull EditText txtStatus,
       @NonNull EditText txtUserName) {
     this.rootView = rootView;
     this.backArrow = backArrow;
     this.linear = linear;
-    this.linearLayout2 = linearLayout2;
     this.plus = plus;
     this.profileImage = profileImage;
     this.saveButton = saveButton;
-    this.textView2 = textView2;
-    this.textView3 = textView3;
-    this.textView4 = textView4;
-    this.textView5 = textView5;
-    this.textView6 = textView6;
     this.txtStatus = txtStatus;
     this.txtUserName = txtUserName;
   }
@@ -124,12 +97,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.linearLayout2;
-      LinearLayout linearLayout2 = ViewBindings.findChildViewById(rootView, id);
-      if (linearLayout2 == null) {
-        break missingId;
-      }
-
       id = R.id.plus;
       ImageView plus = ViewBindings.findChildViewById(rootView, id);
       if (plus == null) {
@@ -148,36 +115,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView2;
-      TextView textView2 = ViewBindings.findChildViewById(rootView, id);
-      if (textView2 == null) {
-        break missingId;
-      }
-
-      id = R.id.textView3;
-      TextView textView3 = ViewBindings.findChildViewById(rootView, id);
-      if (textView3 == null) {
-        break missingId;
-      }
-
-      id = R.id.textView4;
-      TextView textView4 = ViewBindings.findChildViewById(rootView, id);
-      if (textView4 == null) {
-        break missingId;
-      }
-
-      id = R.id.textView5;
-      TextView textView5 = ViewBindings.findChildViewById(rootView, id);
-      if (textView5 == null) {
-        break missingId;
-      }
-
-      id = R.id.textView6;
-      TextView textView6 = ViewBindings.findChildViewById(rootView, id);
-      if (textView6 == null) {
-        break missingId;
-      }
-
       id = R.id.txtStatus;
       EditText txtStatus = ViewBindings.findChildViewById(rootView, id);
       if (txtStatus == null) {
@@ -190,9 +127,8 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, linear,
-          linearLayout2, plus, profileImage, saveButton, textView2, textView3, textView4, textView5,
-          textView6, txtStatus, txtUserName);
+      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, linear, plus,
+          profileImage, saveButton, txtStatus, txtUserName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

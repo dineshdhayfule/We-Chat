@@ -4,7 +4,7 @@ A modern Android chat application built with cutting-edge technologies for seaml
 
 ## 📱 Download
 
-[📥 Download APK](https://github.com/dineshdhayfule/We-Chat/blob/main/app/build/outputs/apk/debug/WeChat.apk)
+[📥 Download APK](https://github.com/dineshdhayfule/We-Chat/blob/main/app/build/outputs/apk/debug/app-debug.apk)
 
 ## ✨ Features
 
