@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
@@ -21,20 +20,20 @@ public final class SampleReciverBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
-  public final Guideline guideLine2;
-
-  @NonNull
   public final TextView reciverText;
 
   @NonNull
   public final TextView reciverTime;
 
-  private SampleReciverBinding(@NonNull ConstraintLayout rootView, @NonNull Guideline guideLine2,
-      @NonNull TextView reciverText, @NonNull TextView reciverTime) {
+  @NonNull
+  public final TextView senderName;
+
+  private SampleReciverBinding(@NonNull ConstraintLayout rootView, @NonNull TextView reciverText,
+      @NonNull TextView reciverTime, @NonNull TextView senderName) {
     this.rootView = rootView;
-    this.guideLine2 = guideLine2;
     this.reciverText = reciverText;
     this.reciverTime = reciverTime;
+    this.senderName = senderName;
   }
 
   @Override
@@ -64,12 +63,6 @@ public final class SampleReciverBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.guideLine2;
-      Guideline guideLine2 = ViewBindings.findChildViewById(rootView, id);
-      if (guideLine2 == null) {
-        break missingId;
-      }
-
       id = R.id.reciverText;
       TextView reciverText = ViewBindings.findChildViewById(rootView, id);
       if (reciverText == null) {
@@ -82,8 +75,14 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleReciverBinding((ConstraintLayout) rootView, guideLine2, reciverText,
-          reciverTime);
+      id = R.id.senderName;
+      TextView senderName = ViewBindings.findChildViewById(rootView, id);
+      if (senderName == null) {
+        break missingId;
+      }
+
+      return new SampleReciverBinding((ConstraintLayout) rootView, reciverText, reciverTime,
+          senderName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

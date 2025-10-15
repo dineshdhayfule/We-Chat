@@ -1,14 +1,65 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/captures
-.externalNativeBuild
-.cxx
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.aex
+*.keystore
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Built native files
+**/build/
+**/build-cache/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration files (sdk path, etc)
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/libraries
+.idea/scopes
 local.properties
+
+# Log files
+*.log
+
+# Android Studio profiling data
+*.hprof
+
+#-*- mode: git-ignore -*-
+
+# User-specific files should be ignored, but not the directory structure.
+.idea/caches/gradle_models.ser
+
+# OSX files
+.DS_Store
+
+# Generated files
+**/R.java
+**/BuildConfig.java
+
+# Firebase
+.firebase/
+
+# Crashlytics
+com_crashlytics_export_strings.xml
+
+# Google Services
+google-services.json
+
+# Private signing keys
+*.jks
+
+# Local test reports
+**/test-results/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# VS Code
+.vscode/

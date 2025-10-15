@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="5dp"
-    android:layout_marginLeft="5dp"
+    android.layout_marginLeft="5dp"
     android:layout_marginTop="4dp"
     android:layout_marginRight="7dp"
     android:background="@drawable/bg_reciver"
@@ -19,6 +19,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:layout_constraintGuide_begin="16dp" />
+
+    <TextView
+        android:id="@+id/senderName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="Sender Name"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/guideLine2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/reciverText"
@@ -35,9 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/reciverTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideLine2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/senderName" />
 
     <TextView
         android:id="@+id/reciverTime"

@@ -92,6 +92,7 @@ id reciverTime
 id relativeLayout
 id saveButton
 id send
+id senderName
 id senderText
 id senderTime
 id settings

@@ -1,7 +1,6 @@
 {
     "logs": [
         {
-<<<<<<< HEAD
             "outputFile": "com.example.wechat.app-mergeDebugResources-34:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
@@ -23,12 +22,6 @@
                 },
                 {
                     "source": "C:\\Users\\DELL\\.gradle\\caches\\8.13\\transforms\\99c6cc953d60b8a692e7d80ddc37b383\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
-=======
-            "outputFile": "com.example.wechat.app-mergeDebugResources-35:/values-watch-v20/values-watch-v20.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\DELL\\.gradle\\caches\\transforms-3\\c6417fe0a2d195ecc03bc330870d53d0\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
->>>>>>> 02ab414df0762f1078581f01c605c98b7eb78e72
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",
@@ -45,26 +38,6 @@
                         "endColumns": "12,12,12",
                         "endOffsets": "869,1040,1213"
                     }
-<<<<<<< HEAD
-=======
-                },
-                {
-                    "source": "C:\\Users\\DELL\\.gradle\\caches\\transforms-3\\0327a0c59d02a7814a45bb3add333a5d\\transformed\\play-services-auth-20.6.0\\res\\values-watch-v20\\values.xml",
-                    "from": {
-                        "startLines": "4,5,6,7,8,9,10,11",
-                        "startColumns": "0,0,0,0,0,0,0,0",
-                        "startOffsets": "173,248,324,399,474,561,638,725",
-                        "endColumns": "74,75,74,74,86,76,86,75",
-                        "endOffsets": "247,323,398,473,560,637,724,800"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,134,214,293,372,463,544,635",
-                        "endColumns": "78,79,78,78,90,80,90,79",
-                        "endOffsets": "129,209,288,367,458,539,630,710"
-                    }
->>>>>>> 02ab414df0762f1078581f01c605c98b7eb78e72
                 }
             ]
         }

@@ -1,6 +1,5 @@
 [
     {
-<<<<<<< HEAD
         "merged": "com.example.wechat.app-mergeDebugResources-35:/layout/activity_group_chat.xml",
         "source": "com.example.wechat.app-main-38:/layout/activity_group_chat.xml"
     },
@@ -43,49 +42,5 @@
     {
         "merged": "com.example.wechat.app-mergeDebugResources-35:/layout/activity_signln.xml",
         "source": "com.example.wechat.app-main-38:/layout/activity_signln.xml"
-=======
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/sample_reciver.xml",
-        "source": "com.example.wechat.app-main-39:/layout/sample_reciver.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/sample_show_user.xml",
-        "source": "com.example.wechat.app-main-39:/layout/sample_show_user.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_chat_detail.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_chat_detail.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/fragment_chats.xml",
-        "source": "com.example.wechat.app-main-39:/layout/fragment_chats.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/sample_sender.xml",
-        "source": "com.example.wechat.app-main-39:/layout/sample_sender.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_splash.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_splash.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_signln.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_signln.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_sign_up.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_sign_up.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_main.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_main.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_settings.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_settings.xml"
-    },
-    {
-        "merged": "com.example.wechat.app-mergeDebugResources-36:/layout/activity_group_chat.xml",
-        "source": "com.example.wechat.app-main-39:/layout/activity_group_chat.xml"
->>>>>>> 02ab414df0762f1078581f01c605c98b7eb78e72
     }
 ]

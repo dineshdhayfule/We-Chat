@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -77,6 +78,7 @@ public class SignlnActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     if(task.isSuccessful())
                                     {
+                                        subscribeToTopic();
                                         Intent intent = new Intent(SignlnActivity.this,MainActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -152,6 +154,9 @@ public class SignlnActivity extends AppCompatActivity {
                             users.setUserName(user.getDisplayName());
                             users.setProfilePic(user.getPhotoUrl().toString());
                             database.getReference().child("Users").child(user.getUid()).setValue(users);
+
+                            subscribeToTopic();
+
                             Intent intent = new Intent(SignlnActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -162,6 +167,19 @@ public class SignlnActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void subscribeToTopic(){
+        FirebaseMessaging.getInstance().subscribeToTopic("group_chat");
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isSuccessful()){
+                    String token = task.getResult();
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("fcmToken").setValue(token);
+                }
+            }
+        });
     }
 
 }
