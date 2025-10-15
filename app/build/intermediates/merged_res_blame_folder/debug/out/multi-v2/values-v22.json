@@ -1,0 +1,27 @@
+{
+    "logs": [
+        {
+<<<<<<< HEAD
+            "outputFile": "com.example.wechat.app-mergeDebugResources-34:/values-v22/values-v22.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DELL\\.gradle\\caches\\8.13\\transforms\\99c6cc953d60b8a692e7d80ddc37b383\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
+=======
+            "outputFile": "com.example.wechat.app-mergeDebugResources-35:/values-v22/values-v22.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DELL\\.gradle\\caches\\transforms-3\\c6417fe0a2d195ecc03bc330870d53d0\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
+>>>>>>> 02ab414df0762f1078581f01c605c98b7eb78e72
+                    "from": {
+                        "startLines": "2,3,4,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,130,217,487",
+                        "endLines": "2,3,8,13",
+                        "endColumns": "74,86,12,12",
+                        "endOffsets": "125,212,482,764"
+                    }
+                }
+            ]
+        }
+    ]
+}

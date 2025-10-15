@@ -1,0 +1,6 @@
+com.example.wechat.test.app-annotation-experimental-1.3.0-0 C:\Users\DELL\.gradle\caches\8.13\transforms\6f7785e9c633f6871c1ce06058addbfb\transformed\annotation-experimental-1.3.0\res
+com.example.wechat.test.app-core-1.5.0-1 C:\Users\DELL\.gradle\caches\8.13\transforms\74a5be928c359114b9e9a14e4013f506\transformed\core-1.5.0\res
+com.example.wechat.test.app-androidTest-2 C:\Users\DELL\AndroidStudioProjects\WeChat\app\build\generated\res\resValues\androidTest\debug
+com.example.wechat.test.app-mergeDebugAndroidTestResources-3 C:\Users\DELL\AndroidStudioProjects\WeChat\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.wechat.test.app-mergeDebugAndroidTestResources-4 C:\Users\DELL\AndroidStudioProjects\WeChat\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.wechat.test.app-merged_res-5 C:\Users\DELL\AndroidStudioProjects\WeChat\app\build\intermediates\merged_res\debugAndroidTest
