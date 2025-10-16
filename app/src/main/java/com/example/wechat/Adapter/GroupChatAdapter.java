@@ -2,7 +2,7 @@ package com.example.wechat.Adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Random;
 
 public class GroupChatAdapter extends RecyclerView.Adapter {
     ArrayList<Object> chatItems;
     Context context;
+    HashMap<String, Integer> userColorMap = new HashMap<>();
 
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECEIVER = 2;
@@ -33,11 +35,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
 
     public GroupChatAdapter(ArrayList<Object> chatItems, Context context) {
         this.chatItems = chatItems;
-        this.context = context;
-    }
-
-    public GroupChatAdapter(ArrayList<MessageModel> messageModels, Context context, boolean isObjectList) {
-        this.chatItems = new ArrayList<>(messageModels);
         this.context = context;
     }
 
@@ -88,6 +85,17 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
                 reciverViewHolder.reciverMsg.setText(message.getMessage());
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
 
+                if (position > 0 && chatItems.get(position - 1) instanceof MessageModel) {
+                    MessageModel previousMessage = (MessageModel) chatItems.get(position - 1);
+                    if (previousMessage.getuId().equals(message.getuId())) {
+                        reciverViewHolder.senderName.setVisibility(View.GONE);
+                    } else {
+                        reciverViewHolder.senderName.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    reciverViewHolder.senderName.setVisibility(View.VISIBLE);
+                }
+
                 if (message.getuId() != null) {
                     FirebaseDatabase.getInstance().getReference().child("Users").child(message.getuId())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -97,6 +105,11 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
                                         Users user = snapshot.getValue(Users.class);
                                         if (user != null) {
                                             reciverViewHolder.senderName.setText(user.getUserName());
+                                            if (user.getUserId() != null) {
+                                                reciverViewHolder.senderName.setTextColor(getUserColor(user.getUserId()));
+                                            } else {
+                                                reciverViewHolder.senderName.setTextColor(Color.GRAY);
+                                            }
                                         }
                                     }
                                 }
@@ -107,18 +120,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
                             });
                 }
             }
-
-            holder.itemView.setOnClickListener(v -> {
-                new AlertDialog.Builder(context)
-                        .setTitle("Delete Message")
-                        .setMessage("Are you sure you want to delete this message?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            FirebaseDatabase.getInstance().getReference().child("Group Chat")
-                                    .child(message.getMessageId()).removeValue();
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            });
         }
     }
 
@@ -130,6 +131,17 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
     private String formatTime(long timeInMillis) {
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
         return formatter.format(new Date(timeInMillis));
+    }
+
+    private int getUserColor(String userId) {
+        if(userId == null) return Color.GRAY;
+        if (userColorMap.containsKey(userId)) {
+            return userColorMap.get(userId);
+        }
+        Random random = new Random(userId.hashCode());
+        int color = Color.rgb(random.nextInt(200), random.nextInt(200), random.nextInt(200));
+        userColorMap.put(userId, color);
+        return color;
     }
 
     public static class DateHeaderViewHolder extends RecyclerView.ViewHolder {

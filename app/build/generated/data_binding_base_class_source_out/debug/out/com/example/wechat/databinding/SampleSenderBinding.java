@@ -4,10 +4,11 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Barrier;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
@@ -17,7 +18,10 @@ import java.lang.String;
 
 public final class SampleSenderBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final RelativeLayout rootView;
+
+  @NonNull
+  public final Barrier barrier;
 
   @NonNull
   public final TextView senderText;
@@ -25,16 +29,17 @@ public final class SampleSenderBinding implements ViewBinding {
   @NonNull
   public final TextView senderTime;
 
-  private SampleSenderBinding(@NonNull ConstraintLayout rootView, @NonNull TextView senderText,
-      @NonNull TextView senderTime) {
+  private SampleSenderBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
+      @NonNull TextView senderText, @NonNull TextView senderTime) {
     this.rootView = rootView;
+    this.barrier = barrier;
     this.senderText = senderText;
     this.senderTime = senderTime;
   }
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public RelativeLayout getRoot() {
     return rootView;
   }
 
@@ -59,6 +64,12 @@ public final class SampleSenderBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.barrier;
+      Barrier barrier = ViewBindings.findChildViewById(rootView, id);
+      if (barrier == null) {
+        break missingId;
+      }
+
       id = R.id.senderText;
       TextView senderText = ViewBindings.findChildViewById(rootView, id);
       if (senderText == null) {
@@ -71,7 +82,7 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleSenderBinding((ConstraintLayout) rootView, senderText, senderTime);
+      return new SampleSenderBinding((RelativeLayout) rootView, barrier, senderText, senderTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

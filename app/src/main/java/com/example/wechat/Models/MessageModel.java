@@ -4,6 +4,7 @@ public class MessageModel
 {
     String uId , message, messageId;
     Long timeStamp;
+    boolean isRead;
 
     public MessageModel(String uId, String message, Long timeStamp) {
         this.uId = uId;
@@ -51,5 +52,13 @@ public class MessageModel
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 }

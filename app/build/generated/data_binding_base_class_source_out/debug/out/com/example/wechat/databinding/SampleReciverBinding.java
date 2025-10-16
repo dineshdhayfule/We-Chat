@@ -4,10 +4,11 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Barrier;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
@@ -17,7 +18,10 @@ import java.lang.String;
 
 public final class SampleReciverBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final RelativeLayout rootView;
+
+  @NonNull
+  public final Barrier barrier;
 
   @NonNull
   public final TextView reciverText;
@@ -28,9 +32,10 @@ public final class SampleReciverBinding implements ViewBinding {
   @NonNull
   public final TextView senderName;
 
-  private SampleReciverBinding(@NonNull ConstraintLayout rootView, @NonNull TextView reciverText,
-      @NonNull TextView reciverTime, @NonNull TextView senderName) {
+  private SampleReciverBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
+      @NonNull TextView reciverText, @NonNull TextView reciverTime, @NonNull TextView senderName) {
     this.rootView = rootView;
+    this.barrier = barrier;
     this.reciverText = reciverText;
     this.reciverTime = reciverTime;
     this.senderName = senderName;
@@ -38,7 +43,7 @@ public final class SampleReciverBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public RelativeLayout getRoot() {
     return rootView;
   }
 
@@ -63,6 +68,12 @@ public final class SampleReciverBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.barrier;
+      Barrier barrier = ViewBindings.findChildViewById(rootView, id);
+      if (barrier == null) {
+        break missingId;
+      }
+
       id = R.id.reciverText;
       TextView reciverText = ViewBindings.findChildViewById(rootView, id);
       if (reciverText == null) {
@@ -81,7 +92,7 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleReciverBinding((ConstraintLayout) rootView, reciverText, reciverTime,
+      return new SampleReciverBinding((RelativeLayout) rootView, barrier, reciverText, reciverTime,
           senderName);
     }
     String missingId = rootView.getResources().getResourceName(id);

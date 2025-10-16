@@ -22,4 +22,10 @@
     <color name="grayBackground">#BCBCBC</color>
     <color name="chatbackground">#AAAAAA</color>
     <color name="dark_grey">#121212</color>
+
+    <!-- New Message Bubble Colors -->
+    <color name="sender_bubble_color">#252D31</color>
+    <color name="receiver_bubble_color">#2C3A42</color>
+    <color name="timestamp_color">#B3FFFFFF</color>
+    <color name="read_receipt_color">#4FC3F7</color>
 </resources>

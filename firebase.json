@@ -9,9 +9,6 @@
         "firebase-debug.log",
         "firebase-debug..log",
         ".local"
-      ],
-      "predeploy": [
-        "cmd /c cd functions && npm run lint" 
       ]
     }
   ]

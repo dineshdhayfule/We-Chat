@@ -46,6 +46,9 @@ public class ChatsFragment extends Fragment {
         binding.chatRecyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+        if (binding.chatRecyclerView.getItemDecorationCount() > 0) {
+            binding.chatRecyclerView.removeItemDecorationAt(0);
+        }
 
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override

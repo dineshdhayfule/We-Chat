@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wechat.ChatDetailActivity;
+import com.example.wechat.Models.MessageModel;
 import com.example.wechat.Models.Users;
 import com.example.wechat.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,8 +46,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
 
-            Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
-
+        Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
         holder.userName.setText(users.getUserName());
 
         // to show last message
