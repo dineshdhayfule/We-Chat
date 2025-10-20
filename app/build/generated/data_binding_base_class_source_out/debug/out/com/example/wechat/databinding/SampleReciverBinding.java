@@ -4,6 +4,7 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -24,6 +25,9 @@ public final class SampleReciverBinding implements ViewBinding {
   public final Barrier barrier;
 
   @NonNull
+  public final ImageView image;
+
+  @NonNull
   public final TextView reciverText;
 
   @NonNull
@@ -33,9 +37,11 @@ public final class SampleReciverBinding implements ViewBinding {
   public final TextView senderName;
 
   private SampleReciverBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
-      @NonNull TextView reciverText, @NonNull TextView reciverTime, @NonNull TextView senderName) {
+      @NonNull ImageView image, @NonNull TextView reciverText, @NonNull TextView reciverTime,
+      @NonNull TextView senderName) {
     this.rootView = rootView;
     this.barrier = barrier;
+    this.image = image;
     this.reciverText = reciverText;
     this.reciverTime = reciverTime;
     this.senderName = senderName;
@@ -74,6 +80,12 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.image;
+      ImageView image = ViewBindings.findChildViewById(rootView, id);
+      if (image == null) {
+        break missingId;
+      }
+
       id = R.id.reciverText;
       TextView reciverText = ViewBindings.findChildViewById(rootView, id);
       if (reciverText == null) {
@@ -92,8 +104,8 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleReciverBinding((RelativeLayout) rootView, barrier, reciverText, reciverTime,
-          senderName);
+      return new SampleReciverBinding((RelativeLayout) rootView, barrier, image, reciverText,
+          reciverTime, senderName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -46,7 +46,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
 
-        Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
+        if (users.getUserName().equals("watcher")) {
+            holder.image.setImageResource(R.drawable.ic_wechat);
+        } else {
+            Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
+        }
+
         holder.userName.setText(users.getUserName());
 
         // to show last message

@@ -26,19 +26,25 @@ public final class ActivityGroupChatBinding implements ViewBinding {
   private final RelativeLayout rootView;
 
   @NonNull
+  public final ImageView attachment;
+
+  @NonNull
   public final ImageView backArrow;
 
   @NonNull
   public final RecyclerView chatRecyclerView;
 
   @NonNull
+  public final ImageView delete;
+
+  @NonNull
   public final EditText enterMessage;
 
   @NonNull
-  public final ImageView imgSettings;
+  public final LinearLayout linear;
 
   @NonNull
-  public final LinearLayout linear;
+  public final ImageView menu;
 
   @NonNull
   public final CircleImageView profileImage;
@@ -55,17 +61,20 @@ public final class ActivityGroupChatBinding implements ViewBinding {
   @NonNull
   public final TextView userName;
 
-  private ActivityGroupChatBinding(@NonNull RelativeLayout rootView, @NonNull ImageView backArrow,
-      @NonNull RecyclerView chatRecyclerView, @NonNull EditText enterMessage,
-      @NonNull ImageView imgSettings, @NonNull LinearLayout linear,
-      @NonNull CircleImageView profileImage, @NonNull RelativeLayout relativeLayout,
-      @NonNull ImageView send, @NonNull Toolbar toolBar, @NonNull TextView userName) {
+  private ActivityGroupChatBinding(@NonNull RelativeLayout rootView, @NonNull ImageView attachment,
+      @NonNull ImageView backArrow, @NonNull RecyclerView chatRecyclerView,
+      @NonNull ImageView delete, @NonNull EditText enterMessage, @NonNull LinearLayout linear,
+      @NonNull ImageView menu, @NonNull CircleImageView profileImage,
+      @NonNull RelativeLayout relativeLayout, @NonNull ImageView send, @NonNull Toolbar toolBar,
+      @NonNull TextView userName) {
     this.rootView = rootView;
+    this.attachment = attachment;
     this.backArrow = backArrow;
     this.chatRecyclerView = chatRecyclerView;
+    this.delete = delete;
     this.enterMessage = enterMessage;
-    this.imgSettings = imgSettings;
     this.linear = linear;
+    this.menu = menu;
     this.profileImage = profileImage;
     this.relativeLayout = relativeLayout;
     this.send = send;
@@ -100,6 +109,12 @@ public final class ActivityGroupChatBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.attachment;
+      ImageView attachment = ViewBindings.findChildViewById(rootView, id);
+      if (attachment == null) {
+        break missingId;
+      }
+
       id = R.id.backArrow;
       ImageView backArrow = ViewBindings.findChildViewById(rootView, id);
       if (backArrow == null) {
@@ -112,21 +127,27 @@ public final class ActivityGroupChatBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.delete;
+      ImageView delete = ViewBindings.findChildViewById(rootView, id);
+      if (delete == null) {
+        break missingId;
+      }
+
       id = R.id.enterMessage;
       EditText enterMessage = ViewBindings.findChildViewById(rootView, id);
       if (enterMessage == null) {
         break missingId;
       }
 
-      id = R.id.imgSettings;
-      ImageView imgSettings = ViewBindings.findChildViewById(rootView, id);
-      if (imgSettings == null) {
-        break missingId;
-      }
-
       id = R.id.linear;
       LinearLayout linear = ViewBindings.findChildViewById(rootView, id);
       if (linear == null) {
+        break missingId;
+      }
+
+      id = R.id.menu;
+      ImageView menu = ViewBindings.findChildViewById(rootView, id);
+      if (menu == null) {
         break missingId;
       }
 
@@ -156,8 +177,9 @@ public final class ActivityGroupChatBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityGroupChatBinding((RelativeLayout) rootView, backArrow, chatRecyclerView,
-          enterMessage, imgSettings, linear, profileImage, relativeLayout, send, toolBar, userName);
+      return new ActivityGroupChatBinding((RelativeLayout) rootView, attachment, backArrow,
+          chatRecyclerView, delete, enterMessage, linear, menu, profileImage, relativeLayout, send,
+          toolBar, userName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

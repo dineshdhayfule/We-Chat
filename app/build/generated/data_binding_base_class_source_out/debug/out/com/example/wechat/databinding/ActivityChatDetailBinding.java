@@ -29,19 +29,28 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final RelativeLayout RelativeLayout;
 
   @NonNull
-  public final ImageView backArrow;
+  public final ImageView attachment;
 
   @NonNull
-  public final ImageView changeWallpaper;
+  public final ImageView backArrow;
 
   @NonNull
   public final RecyclerView chatRecyclerView;
 
   @NonNull
+  public final ImageView delete;
+
+  @NonNull
   public final EditText enterMessage;
 
   @NonNull
+  public final TextView lastSeen;
+
+  @NonNull
   public final LinearLayout linear;
+
+  @NonNull
+  public final ImageView menu;
 
   @NonNull
   public final CircleImageView profileImage;
@@ -53,24 +62,32 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final Toolbar toolBar;
 
   @NonNull
+  public final TextView typingIndicator;
+
+  @NonNull
   public final TextView userName;
 
   private ActivityChatDetailBinding(@NonNull RelativeLayout rootView,
-      @NonNull RelativeLayout RelativeLayout, @NonNull ImageView backArrow,
-      @NonNull ImageView changeWallpaper, @NonNull RecyclerView chatRecyclerView,
-      @NonNull EditText enterMessage, @NonNull LinearLayout linear,
-      @NonNull CircleImageView profileImage, @NonNull ImageView send, @NonNull Toolbar toolBar,
+      @NonNull RelativeLayout RelativeLayout, @NonNull ImageView attachment,
+      @NonNull ImageView backArrow, @NonNull RecyclerView chatRecyclerView,
+      @NonNull ImageView delete, @NonNull EditText enterMessage, @NonNull TextView lastSeen,
+      @NonNull LinearLayout linear, @NonNull ImageView menu, @NonNull CircleImageView profileImage,
+      @NonNull ImageView send, @NonNull Toolbar toolBar, @NonNull TextView typingIndicator,
       @NonNull TextView userName) {
     this.rootView = rootView;
     this.RelativeLayout = RelativeLayout;
+    this.attachment = attachment;
     this.backArrow = backArrow;
-    this.changeWallpaper = changeWallpaper;
     this.chatRecyclerView = chatRecyclerView;
+    this.delete = delete;
     this.enterMessage = enterMessage;
+    this.lastSeen = lastSeen;
     this.linear = linear;
+    this.menu = menu;
     this.profileImage = profileImage;
     this.send = send;
     this.toolBar = toolBar;
+    this.typingIndicator = typingIndicator;
     this.userName = userName;
   }
 
@@ -103,15 +120,15 @@ public final class ActivityChatDetailBinding implements ViewBinding {
     missingId: {
       RelativeLayout RelativeLayout = (RelativeLayout) rootView;
 
-      id = R.id.backArrow;
-      ImageView backArrow = ViewBindings.findChildViewById(rootView, id);
-      if (backArrow == null) {
+      id = R.id.attachment;
+      ImageView attachment = ViewBindings.findChildViewById(rootView, id);
+      if (attachment == null) {
         break missingId;
       }
 
-      id = R.id.change_wallpaper;
-      ImageView changeWallpaper = ViewBindings.findChildViewById(rootView, id);
-      if (changeWallpaper == null) {
+      id = R.id.backArrow;
+      ImageView backArrow = ViewBindings.findChildViewById(rootView, id);
+      if (backArrow == null) {
         break missingId;
       }
 
@@ -121,15 +138,33 @@ public final class ActivityChatDetailBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.delete;
+      ImageView delete = ViewBindings.findChildViewById(rootView, id);
+      if (delete == null) {
+        break missingId;
+      }
+
       id = R.id.enterMessage;
       EditText enterMessage = ViewBindings.findChildViewById(rootView, id);
       if (enterMessage == null) {
         break missingId;
       }
 
+      id = R.id.last_seen;
+      TextView lastSeen = ViewBindings.findChildViewById(rootView, id);
+      if (lastSeen == null) {
+        break missingId;
+      }
+
       id = R.id.linear;
       LinearLayout linear = ViewBindings.findChildViewById(rootView, id);
       if (linear == null) {
+        break missingId;
+      }
+
+      id = R.id.menu;
+      ImageView menu = ViewBindings.findChildViewById(rootView, id);
+      if (menu == null) {
         break missingId;
       }
 
@@ -151,15 +186,21 @@ public final class ActivityChatDetailBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.typing_indicator;
+      TextView typingIndicator = ViewBindings.findChildViewById(rootView, id);
+      if (typingIndicator == null) {
+        break missingId;
+      }
+
       id = R.id.userName;
       TextView userName = ViewBindings.findChildViewById(rootView, id);
       if (userName == null) {
         break missingId;
       }
 
-      return new ActivityChatDetailBinding((RelativeLayout) rootView, RelativeLayout, backArrow,
-          changeWallpaper, chatRecyclerView, enterMessage, linear, profileImage, send, toolBar,
-          userName);
+      return new ActivityChatDetailBinding((RelativeLayout) rootView, RelativeLayout, attachment,
+          backArrow, chatRecyclerView, delete, enterMessage, lastSeen, linear, menu, profileImage,
+          send, toolBar, typingIndicator, userName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

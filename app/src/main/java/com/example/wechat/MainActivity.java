@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
@@ -54,6 +56,27 @@ public class MainActivity extends AppCompatActivity {
 
         askNotificationPermission();
         getFCMToken();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUserStatus(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        updateUserStatus(false);
+    }
+
+    private void updateUserStatus(boolean isOnline) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("online", isOnline);
+        if(!isOnline){
+            map.put("lastSeen", System.currentTimeMillis());
+        }
+        database.getReference().child("Users").child(mAuth.getUid()).updateChildren(map);
     }
 
     private void askNotificationPermission() {
@@ -94,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.logOut:
+                updateUserStatus(false);
                 FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

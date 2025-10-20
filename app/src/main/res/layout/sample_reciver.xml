@@ -26,6 +26,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:id="@+id/reply_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/reply_background"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/senderName">
+
+            <TextView
+                android:id="@+id/replied_to_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You"
+                android:textColor="@color/bright_blue_button"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/replied_to_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is the message that was replied to."
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="200dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reply_layout" />
+
         <TextView
             android:id="@+id/reciverText"
             android:layout_width="wrap_content"
@@ -35,7 +74,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/senderName"
+            app:layout_constraintTop_toBottomOf="@+id/image"
             app:layout_constraintWidth_max="250dp" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -50,11 +89,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android.text="12:00 pm"
+            android:text="12:00 pm"
             android:textColor="@color/timestamp_color"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barrier" />
+            app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

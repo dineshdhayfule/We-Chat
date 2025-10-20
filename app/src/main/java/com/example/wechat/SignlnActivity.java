@@ -68,30 +68,24 @@ public class SignlnActivity extends AppCompatActivity {
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!binding.txtEmail.getText().toString().isEmpty() && !binding.txtPassword.getText().toString().isEmpty())
-                {
+                if (!binding.txtEmail.getText().toString().isEmpty() && !binding.txtPassword.getText().toString().isEmpty()) {
                     progressDialog.show();
-                    mAuth.signInWithEmailAndPassword(binding.txtEmail.getText().toString(),binding.txtPassword.getText().toString())
+                    mAuth.signInWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtPassword.getText().toString())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressDialog.dismiss();
-                                    if(task.isSuccessful())
-                                    {
+                                    if (task.isSuccessful()) {
                                         subscribeToTopic();
-                                        Intent intent = new Intent(SignlnActivity.this,MainActivity.class);
+                                        Intent intent = new Intent(SignlnActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(SignlnActivity.this,task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SignlnActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                }
-                else
-                {
+                } else {
                     Toast.makeText(SignlnActivity.this, "Enter data", Toast.LENGTH_SHORT).show();
                 }
             }

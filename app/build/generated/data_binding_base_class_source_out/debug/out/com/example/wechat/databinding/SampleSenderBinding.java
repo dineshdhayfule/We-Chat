@@ -4,6 +4,7 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -24,15 +25,19 @@ public final class SampleSenderBinding implements ViewBinding {
   public final Barrier barrier;
 
   @NonNull
+  public final ImageView image;
+
+  @NonNull
   public final TextView senderText;
 
   @NonNull
   public final TextView senderTime;
 
   private SampleSenderBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
-      @NonNull TextView senderText, @NonNull TextView senderTime) {
+      @NonNull ImageView image, @NonNull TextView senderText, @NonNull TextView senderTime) {
     this.rootView = rootView;
     this.barrier = barrier;
+    this.image = image;
     this.senderText = senderText;
     this.senderTime = senderTime;
   }
@@ -70,6 +75,12 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.image;
+      ImageView image = ViewBindings.findChildViewById(rootView, id);
+      if (image == null) {
+        break missingId;
+      }
+
       id = R.id.senderText;
       TextView senderText = ViewBindings.findChildViewById(rootView, id);
       if (senderText == null) {
@@ -82,7 +93,8 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleSenderBinding((RelativeLayout) rootView, barrier, senderText, senderTime);
+      return new SampleSenderBinding((RelativeLayout) rootView, barrier, image, senderText,
+          senderTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

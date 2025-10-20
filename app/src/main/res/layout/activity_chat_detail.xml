@@ -5,8 +5,7 @@
     android:id="@+id/RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w14"
-    app:layout_constraintEnd_toStartOf="@+id/userName"
+    android:background="@color/dark_grey"
     tools:context=".ChatDetailActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -24,47 +23,44 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/enterMessage"
+        <ImageView
+            android:id="@+id/attachment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="7dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_attachment" />
+
+        <EditText
+            android:id="@+id/enterMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_et_message"
             android:hint="Message"
             android:inputType="textLongMessage|textMultiLine"
             android:maxHeight="120dp"
             android:padding="15dp"
-            android:textColor="@color/black"
-            android:textColorHint="#2F363D"
-            tools:ignore="Autofill,HardcodedText,InefficientWeight,RtlHardcoded" />
+            android:textColor="@color/white"
+            android:textColorHint="#2F363D" />
 
         <LinearLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/bg_send"
-            tools:ignore="ObsoleteLayoutParam">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/send"
                 android:layout_width="30dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"
-                android:src="@drawable/round_send_24"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                android:src="@drawable/round_send_24" />
         </LinearLayout>
     </LinearLayout>
 
@@ -85,55 +81,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/profile_image"
+                app:layout_constraintEnd_toStartOf="@id/profile_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrow_back_24"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                app:srcCompat="@drawable/arrow_back_24" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:padding="5dp"
                 android:src="@drawable/avatar"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/backArrow"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="RtlHardcoded" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
                 android:text="UserName"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/last_seen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Last seen today at 12:00 PM"
+                android:textColor="@color/lightGrey"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+            <TextView
+                android:id="@+id/typing_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="typing..."
+                android:textColor="@color/lightGrey"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/userName" />
 
             <ImageView
-                android:id="@+id/change_wallpaper"
+                android:id="@+id/menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/outline_settings_24"
+                android:src="@drawable/ic_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/delete"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription,RtlHardcoded" />
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 </RelativeLayout>

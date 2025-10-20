@@ -29,10 +29,10 @@ public final class ActivitySignlnBinding implements ViewBinding {
   public final Button btnSignIn;
 
   @NonNull
-  public final ImageView imageView2;
+  public final TextView forgotPassword;
 
   @NonNull
-  public final TextView textView;
+  public final ImageView imageView2;
 
   @NonNull
   public final TextView txtClicktoSignUp;
@@ -44,14 +44,14 @@ public final class ActivitySignlnBinding implements ViewBinding {
   public final EditText txtPassword;
 
   private ActivitySignlnBinding(@NonNull LinearLayout rootView, @NonNull Button btnGoogle,
-      @NonNull Button btnSignIn, @NonNull ImageView imageView2, @NonNull TextView textView,
+      @NonNull Button btnSignIn, @NonNull TextView forgotPassword, @NonNull ImageView imageView2,
       @NonNull TextView txtClicktoSignUp, @NonNull EditText txtEmail,
       @NonNull EditText txtPassword) {
     this.rootView = rootView;
     this.btnGoogle = btnGoogle;
     this.btnSignIn = btnSignIn;
+    this.forgotPassword = forgotPassword;
     this.imageView2 = imageView2;
-    this.textView = textView;
     this.txtClicktoSignUp = txtClicktoSignUp;
     this.txtEmail = txtEmail;
     this.txtPassword = txtPassword;
@@ -96,15 +96,15 @@ public final class ActivitySignlnBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.imageView2;
-      ImageView imageView2 = ViewBindings.findChildViewById(rootView, id);
-      if (imageView2 == null) {
+      id = R.id.forgot_password;
+      TextView forgotPassword = ViewBindings.findChildViewById(rootView, id);
+      if (forgotPassword == null) {
         break missingId;
       }
 
-      id = R.id.textView;
-      TextView textView = ViewBindings.findChildViewById(rootView, id);
-      if (textView == null) {
+      id = R.id.imageView2;
+      ImageView imageView2 = ViewBindings.findChildViewById(rootView, id);
+      if (imageView2 == null) {
         break missingId;
       }
 
@@ -126,8 +126,8 @@ public final class ActivitySignlnBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySignlnBinding((LinearLayout) rootView, btnGoogle, btnSignIn, imageView2,
-          textView, txtClicktoSignUp, txtEmail, txtPassword);
+      return new ActivitySignlnBinding((LinearLayout) rootView, btnGoogle, btnSignIn,
+          forgotPassword, imageView2, txtClicktoSignUp, txtEmail, txtPassword);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

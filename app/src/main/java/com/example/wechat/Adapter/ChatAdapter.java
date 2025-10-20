@@ -2,6 +2,8 @@ package com.example.wechat.Adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +13,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wechat.ImageViewerActivity;
 import com.example.wechat.Models.MessageModel;
 import com.example.wechat.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ChatAdapter extends RecyclerView.Adapter {
     ArrayList<Object> chatItems;
     Context context;
     String recId;
+
+    private boolean isMultiSelectMode = false;
+    private ArrayList<MessageModel> selectedMessages = new ArrayList<>();
 
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECEIVER = 2;
@@ -34,6 +42,22 @@ public class ChatAdapter extends RecyclerView.Adapter {
         this.chatItems = chatItems;
         this.context = context;
         this.recId = recId;
+    }
+
+    public void setMultiSelectMode(boolean isMultiSelectMode) {
+        this.isMultiSelectMode = isMultiSelectMode;
+        if (!isMultiSelectMode) {
+            selectedMessages.clear();
+        }
+        notifyDataSetChanged();
+    }
+
+    public boolean isMultiSelectMode() {
+        return isMultiSelectMode;
+    }
+
+    public List<MessageModel> getSelectedMessages() {
+        return selectedMessages;
     }
 
     @Override
@@ -74,30 +98,61 @@ public class ChatAdapter extends RecyclerView.Adapter {
             ((DateHeaderViewHolder) holder).dateTextView.setText(date);
         } else {
             MessageModel message = (MessageModel) item;
+
+            holder.itemView.setBackgroundColor(selectedMessages.contains(message) ? Color.LTGRAY : Color.TRANSPARENT);
+
+            holder.itemView.setOnLongClickListener(v -> {
+                if (!isMultiSelectMode) {
+                    setMultiSelectMode(true);
+                }
+                toggleSelection(message, holder.itemView);
+                return true;
+            });
+
+            holder.itemView.setOnClickListener(v -> {
+                if (isMultiSelectMode) {
+                    toggleSelection(message, holder.itemView);
+                } else {
+                    if (message.getImageUrl() != null) {
+                        Intent intent = new Intent(context, ImageViewerActivity.class);
+                        intent.putExtra("imageUrl", message.getImageUrl());
+                        context.startActivity(intent);
+                    }
+                }
+            });
+
             if (holder instanceof SenderViewHolder) {
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
-                senderViewHolder.senderMsg.setText(message.getMessage());
+                if(message.getImageUrl() != null){
+                    senderViewHolder.senderMsg.setVisibility(View.GONE);
+                    senderViewHolder.image.setVisibility(View.VISIBLE);
+                    Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(senderViewHolder.image);
+                } else {
+                    senderViewHolder.senderMsg.setText(message.getMessage());
+                }
                 senderViewHolder.senderTime.setText(formatTime(message.getTimeStamp()));
             } else {
                 ReciverViewHolder reciverViewHolder = (ReciverViewHolder) holder;
-                reciverViewHolder.reciverMsg.setText(message.getMessage());
+                if(message.getImageUrl() != null){
+                    reciverViewHolder.reciverMsg.setVisibility(View.GONE);
+                    reciverViewHolder.image.setVisibility(View.VISIBLE);
+                    Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(reciverViewHolder.image);
+                } else {
+                    reciverViewHolder.reciverMsg.setText(message.getMessage());
+                }
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
                 reciverViewHolder.senderName.setVisibility(View.GONE);
             }
+        }
+    }
 
-            holder.itemView.setOnClickListener(v -> {
-                new AlertDialog.Builder(context)
-                        .setTitle("Delete Message")
-                        .setMessage("Are you sure you want to delete this message?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            String senderRoom = FirebaseAuth.getInstance().getUid() + recId;
-                            FirebaseDatabase.getInstance().getReference().child("chats")
-                                    .child(senderRoom)
-                                    .child(message.getMessageId()).removeValue();
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            });
+    private void toggleSelection(MessageModel message, View view) {
+        if (selectedMessages.contains(message)) {
+            selectedMessages.remove(message);
+            view.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            selectedMessages.add(message);
+            view.setBackgroundColor(Color.LTGRAY);
         }
     }
 
@@ -121,22 +176,26 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     public class ReciverViewHolder extends RecyclerView.ViewHolder {
         TextView reciverMsg, reciverTime, senderName;
+        ImageView image;
 
         public ReciverViewHolder(@NonNull View itemView) {
             super(itemView);
             reciverMsg = itemView.findViewById(R.id.reciverText);
             reciverTime = itemView.findViewById(R.id.reciverTime);
             senderName = itemView.findViewById(R.id.senderName);
+            image = itemView.findViewById(R.id.image);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
         TextView senderMsg, senderTime;
+        ImageView image;
 
         public SenderViewHolder(@NonNull View itemView) {
             super(itemView);
             senderMsg = itemView.findViewById(R.id.senderText);
             senderTime = itemView.findViewById(R.id.senderTime);
+            image = itemView.findViewById(R.id.image);
         }
     }
 }
