@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -123,20 +125,70 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             if (holder instanceof SenderViewHolder) {
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
+                if(message.getRepliedToMessage() != null){
+                    senderViewHolder.replyLayout.setVisibility(View.VISIBLE);
+                    senderViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                    if(message.getRepliedToMessage().equals("Photo")){
+                        senderViewHolder.repliedToMessage.setText("Photo");
+                    } else {
+                        senderViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
+                    }
+                } else {
+                    senderViewHolder.replyLayout.setVisibility(View.GONE);
+                }
+
                 if(message.getImageUrl() != null){
                     senderViewHolder.senderMsg.setVisibility(View.GONE);
                     senderViewHolder.image.setVisibility(View.VISIBLE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(senderViewHolder.image);
+                } else if(message.getAudioUrl() != null){
+                    senderViewHolder.senderMsg.setVisibility(View.GONE);
+                    senderViewHolder.playButton.setVisibility(View.VISIBLE);
+                    senderViewHolder.playButton.setOnClickListener(v -> {
+                        MediaPlayer mediaPlayer = new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(message.getAudioUrl());
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } else {
                     senderViewHolder.senderMsg.setText(message.getMessage());
                 }
                 senderViewHolder.senderTime.setText(formatTime(message.getTimeStamp()));
             } else {
                 ReciverViewHolder reciverViewHolder = (ReciverViewHolder) holder;
+                if(message.getRepliedToMessage() != null){
+                    reciverViewHolder.replyLayout.setVisibility(View.VISIBLE);
+                    reciverViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                     if(message.getRepliedToMessage().equals("Photo")){
+                        reciverViewHolder.repliedToMessage.setText("Photo");
+                    } else {
+                        reciverViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
+                    }
+                } else {
+                    reciverViewHolder.replyLayout.setVisibility(View.GONE);
+                }
+
                 if(message.getImageUrl() != null){
                     reciverViewHolder.reciverMsg.setVisibility(View.GONE);
                     reciverViewHolder.image.setVisibility(View.VISIBLE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(reciverViewHolder.image);
+                } else if(message.getAudioUrl() != null){
+                    reciverViewHolder.reciverMsg.setVisibility(View.GONE);
+                    reciverViewHolder.playButton.setVisibility(View.VISIBLE);
+                    reciverViewHolder.playButton.setOnClickListener(v -> {
+                        MediaPlayer mediaPlayer = new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(message.getAudioUrl());
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } else {
                     reciverViewHolder.reciverMsg.setText(message.getMessage());
                 }
@@ -175,8 +227,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
     }
 
     public class ReciverViewHolder extends RecyclerView.ViewHolder {
-        TextView reciverMsg, reciverTime, senderName;
-        ImageView image;
+        TextView reciverMsg, reciverTime, senderName, repliedToSender, repliedToMessage;
+        ImageView image, playButton;
+        View replyLayout;
 
         public ReciverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -184,18 +237,27 @@ public class ChatAdapter extends RecyclerView.Adapter {
             reciverTime = itemView.findViewById(R.id.reciverTime);
             senderName = itemView.findViewById(R.id.senderName);
             image = itemView.findViewById(R.id.image);
+            replyLayout = itemView.findViewById(R.id.reply_layout);
+            repliedToSender = itemView.findViewById(R.id.replied_to_sender);
+            repliedToMessage = itemView.findViewById(R.id.replied_to_message);
+            playButton = itemView.findViewById(R.id.play_button);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
-        TextView senderMsg, senderTime;
-        ImageView image;
+        TextView senderMsg, senderTime, repliedToSender, repliedToMessage;
+        ImageView image, playButton;
+        View replyLayout;
 
         public SenderViewHolder(@NonNull View itemView) {
             super(itemView);
             senderMsg = itemView.findViewById(R.id.senderText);
             senderTime = itemView.findViewById(R.id.senderTime);
             image = itemView.findViewById(R.id.image);
+            replyLayout = itemView.findViewById(R.id.reply_layout);
+            repliedToSender = itemView.findViewById(R.id.replied_to_sender);
+            repliedToMessage = itemView.findViewById(R.id.replied_to_message);
+            playButton = itemView.findViewById(R.id.play_button);
         }
     }
 }

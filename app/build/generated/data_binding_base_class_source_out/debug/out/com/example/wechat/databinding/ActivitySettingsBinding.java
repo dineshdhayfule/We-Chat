@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -25,6 +26,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
 
   @NonNull
   public final ImageView backArrow;
+
+  @NonNull
+  public final TextView blockedUsers;
 
   @NonNull
   public final LinearLayout linear;
@@ -45,11 +49,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final EditText txtUserName;
 
   private ActivitySettingsBinding(@NonNull RelativeLayout rootView, @NonNull ImageView backArrow,
-      @NonNull LinearLayout linear, @NonNull ImageView plus, @NonNull CircleImageView profileImage,
-      @NonNull AppCompatButton saveButton, @NonNull EditText txtStatus,
-      @NonNull EditText txtUserName) {
+      @NonNull TextView blockedUsers, @NonNull LinearLayout linear, @NonNull ImageView plus,
+      @NonNull CircleImageView profileImage, @NonNull AppCompatButton saveButton,
+      @NonNull EditText txtStatus, @NonNull EditText txtUserName) {
     this.rootView = rootView;
     this.backArrow = backArrow;
+    this.blockedUsers = blockedUsers;
     this.linear = linear;
     this.plus = plus;
     this.profileImage = profileImage;
@@ -91,6 +96,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.blocked_users;
+      TextView blockedUsers = ViewBindings.findChildViewById(rootView, id);
+      if (blockedUsers == null) {
+        break missingId;
+      }
+
       id = R.id.linear;
       LinearLayout linear = ViewBindings.findChildViewById(rootView, id);
       if (linear == null) {
@@ -127,8 +138,8 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, linear, plus,
-          profileImage, saveButton, txtStatus, txtUserName);
+      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, blockedUsers, linear,
+          plus, profileImage, saveButton, txtStatus, txtUserName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

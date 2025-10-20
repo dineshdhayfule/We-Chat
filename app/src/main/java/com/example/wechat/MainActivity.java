@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -52,10 +53,17 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
 
         binding.viewPager.setAdapter(new FragmentsAdapter(getSupportFragmentManager()));
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
+//        binding.tabLayout.setupWithViewPager(binding.viewPager);
 
         askNotificationPermission();
         getFCMToken();
+
+        binding.fabNewChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NewChatActivity.class));
+            }
+        });
     }
 
     @Override

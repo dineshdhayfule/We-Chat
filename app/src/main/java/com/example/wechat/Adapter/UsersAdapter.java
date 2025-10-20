@@ -23,15 +23,46 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
 {
     ArrayList <Users> list;
     Context context;
+    List<String> blockedUsers = new ArrayList<>();
+    boolean showLastMessage;
 
     public UsersAdapter(ArrayList<Users> list, Context context) {
         this.list = list;
         this.context = context;
+        this.showLastMessage = true;
+        fetchBlockedUsers();
+    }
+
+    public UsersAdapter(ArrayList<Users> list, Context context, boolean showLastMessage) {
+        this.list = list;
+        this.context = context;
+        this.showLastMessage = showLastMessage;
+        fetchBlockedUsers();
+    }
+
+    private void fetchBlockedUsers(){
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("blockedUsers")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        blockedUsers.clear();
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            blockedUsers.add(dataSnapshot.getKey());
+                        }
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     @NonNull
@@ -46,36 +77,47 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
 
-        if (users.getUserName().equals("watcher")) {
+        if(blockedUsers.contains(users.getUserId())){
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+            return;
+        }
+
+        // Safely check for "watcher" user to prevent crashes
+        if ("watcher".equals(users.getUserName())) {
             holder.image.setImageResource(R.drawable.ic_wechat);
         } else {
             Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
         }
 
-        holder.userName.setText(users.getUserName());
+        // Safely set user name
+        if (users.getUserName() != null) {
+            holder.userName.setText(users.getUserName());
+        }
 
-        // to show last message
-        FirebaseDatabase.getInstance().getReference().child("chats")
-                        .child(FirebaseAuth.getInstance().getUid()+ users.getUserId())
-                        .orderByChild("timeStamp")
-                        .limitToLast(1)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.hasChildren())
-                                {
-                                    for (DataSnapshot snapshot1 : snapshot.getChildren())
-                                    {
-                                        holder.lastMessage.setText(snapshot1.child("message").getValue().toString());
-                                    }
+        if(showLastMessage) {
+            FirebaseDatabase.getInstance().getReference().child("chats")
+                    .child(FirebaseAuth.getInstance().getUid() + users.getUserId())
+                    .orderByChild("timeStamp")
+                    .limitToLast(1)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChildren()) {
+                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                    holder.lastMessage.setText(snapshot1.child("message").getValue(String.class));
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                        }
+                    });
+        } else {
+            holder.lastMessage.setVisibility(View.GONE);
+        }
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

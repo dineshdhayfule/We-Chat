@@ -20,56 +20,75 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ChatsFragment extends Fragment {
 
-
     FragmentChatsBinding binding;
-    ArrayList <Users> list = new ArrayList<>();
+    ArrayList<Users> list = new ArrayList<>();
     FirebaseDatabase database;
+    UsersAdapter adapter;
+
     public ChatsFragment() {
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        binding=FragmentChatsBinding.inflate(inflater,container,false);
+        binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
-        UsersAdapter adapter = new UsersAdapter(list,getContext());
 
+        adapter = new UsersAdapter(list, getContext());
         binding.chatRecyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+
+        // Forcefully remove any and all item decorations to prevent stray lines
         if (binding.chatRecyclerView.getItemDecorationCount() > 0) {
             binding.chatRecyclerView.removeItemDecorationAt(0);
         }
 
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("chats").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren())
-                {
-                    Users  users= dataSnapshot.getValue(Users.class);
-                    users.setUserId(dataSnapshot.getKey());
-
-                    if (!users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
-                    {
-                        list.add(users);
+                Set<String> userIds = new HashSet<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (dataSnapshot.getKey() != null && dataSnapshot.getKey().contains(FirebaseAuth.getInstance().getUid())) {
+                        userIds.add(dataSnapshot.getKey().replace(FirebaseAuth.getInstance().getUid(), ""));
                     }
                 }
-            adapter.notifyDataSetChanged();
+
+                if (userIds.isEmpty()) {
+                    list.clear();
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
+
+                list.clear();
+                for (String userId : userIds) {
+                    database.getReference().child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Users user = snapshot.getValue(Users.class);
+                                user.setUserId(snapshot.getKey());
+                                list.add(user);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 

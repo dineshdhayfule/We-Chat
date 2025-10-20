@@ -6,21 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
+import com.google.android.material.textfield.TextInputEditText;
+import de.hdodenhof.circleimageview.CircleImageView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ActivitySignlnBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final ScrollView rootView;
 
   @NonNull
   public final Button btnGoogle;
@@ -32,7 +33,7 @@ public final class ActivitySignlnBinding implements ViewBinding {
   public final TextView forgotPassword;
 
   @NonNull
-  public final ImageView imageView2;
+  public final CircleImageView imageView2;
 
   @NonNull
   public final TextView txtClicktoSignUp;
@@ -41,12 +42,12 @@ public final class ActivitySignlnBinding implements ViewBinding {
   public final EditText txtEmail;
 
   @NonNull
-  public final EditText txtPassword;
+  public final TextInputEditText txtPassword;
 
-  private ActivitySignlnBinding(@NonNull LinearLayout rootView, @NonNull Button btnGoogle,
-      @NonNull Button btnSignIn, @NonNull TextView forgotPassword, @NonNull ImageView imageView2,
-      @NonNull TextView txtClicktoSignUp, @NonNull EditText txtEmail,
-      @NonNull EditText txtPassword) {
+  private ActivitySignlnBinding(@NonNull ScrollView rootView, @NonNull Button btnGoogle,
+      @NonNull Button btnSignIn, @NonNull TextView forgotPassword,
+      @NonNull CircleImageView imageView2, @NonNull TextView txtClicktoSignUp,
+      @NonNull EditText txtEmail, @NonNull TextInputEditText txtPassword) {
     this.rootView = rootView;
     this.btnGoogle = btnGoogle;
     this.btnSignIn = btnSignIn;
@@ -59,7 +60,7 @@ public final class ActivitySignlnBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public ScrollView getRoot() {
     return rootView;
   }
 
@@ -103,7 +104,7 @@ public final class ActivitySignlnBinding implements ViewBinding {
       }
 
       id = R.id.imageView2;
-      ImageView imageView2 = ViewBindings.findChildViewById(rootView, id);
+      CircleImageView imageView2 = ViewBindings.findChildViewById(rootView, id);
       if (imageView2 == null) {
         break missingId;
       }
@@ -121,13 +122,13 @@ public final class ActivitySignlnBinding implements ViewBinding {
       }
 
       id = R.id.txtPassword;
-      EditText txtPassword = ViewBindings.findChildViewById(rootView, id);
+      TextInputEditText txtPassword = ViewBindings.findChildViewById(rootView, id);
       if (txtPassword == null) {
         break missingId;
       }
 
-      return new ActivitySignlnBinding((LinearLayout) rootView, btnGoogle, btnSignIn,
-          forgotPassword, imageView2, txtClicktoSignUp, txtEmail, txtPassword);
+      return new ActivitySignlnBinding((ScrollView) rootView, btnGoogle, btnSignIn, forgotPassword,
+          imageView2, txtClicktoSignUp, txtEmail, txtPassword);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

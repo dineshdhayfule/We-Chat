@@ -4,12 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -31,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +54,10 @@ public class ChatDetailActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
     ChatAdapter chatAdapter;
+    MessageModel repliedToMessage = null;
+
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int GALLERY_REQUEST_CODE = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +111,28 @@ public class ChatDetailActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                if (chatItems.get(position) instanceof MessageModel) {
+                    repliedToMessage = (MessageModel) chatItems.get(position);
+                    binding.replyLayout.setVisibility(View.VISIBLE);
+                    binding.repliedToSender.setText(repliedToMessage.getuId().equals(senderId) ? "You" : userName);
+                    if(repliedToMessage.getImageUrl() != null){
+                        binding.repliedToMessage.setText("Photo");
+                    } else {
+                        binding.repliedToMessage.setText(repliedToMessage.getMessage());
+                    }
+                }
+            }
+        }).attachToRecyclerView(binding.chatRecyclerView);
 
         final String senderRoom = senderId + recieveId;
         final String receiverRoom = recieveId + senderId;
@@ -195,7 +230,19 @@ public class ChatDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, 25);
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            }
+        });
+
+        binding.camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(ChatDetailActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(ChatDetailActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+                } else {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                }
             }
         });
 
@@ -240,6 +287,12 @@ public class ChatDetailActivity extends AppCompatActivity {
                 } else {
                     final MessageModel model = new MessageModel(senderId, message);
                     model.setTimeStamp(new Date().getTime());
+                    if(repliedToMessage != null){
+                        model.setRepliedToMessage(repliedToMessage.getMessage());
+                        model.setRepliedToSender(repliedToMessage.getuId().equals(senderId) ? "You" : userName);
+                        binding.replyLayout.setVisibility(View.GONE);
+                        repliedToMessage = null;
+                    }
                     binding.enterMessage.setText("");
                     database.getReference().child("chats")
                             .child(senderRoom)
@@ -262,7 +315,7 @@ public class ChatDetailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
-            if(requestCode == 25){
+            if(requestCode == GALLERY_REQUEST_CODE){
                 if(data.getData() != null){
                     Uri selectedImage = data.getData();
                     final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
@@ -272,10 +325,10 @@ public class ChatDetailActivity extends AppCompatActivity {
                             reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    String messageText = uri.toString();
-                                    final MessageModel model = new MessageModel(auth.getUid(), messageText);
+                                    String imageUrl = uri.toString();
+                                    final MessageModel model = new MessageModel(auth.getUid(), "Photo");
                                     model.setTimeStamp(new Date().getTime());
-                                    model.setImageUrl(messageText);
+                                    model.setImageUrl(imageUrl);
 
                                     final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
                                     final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
@@ -291,6 +344,49 @@ public class ChatDetailActivity extends AppCompatActivity {
                         }
                     });
                 }
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                byte[] bb = bytes.toByteArray();
+                final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
+                reference.putBytes(bb).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                final MessageModel model = new MessageModel(auth.getUid(), "Photo");
+                                model.setTimeStamp(new Date().getTime());
+                                model.setImageUrl(imageUrl);
+
+                                final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
+                                final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
+
+                                database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        database.getReference().child("chats").child(receiverRoom).push().setValue(model);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_REQUEST_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -28,16 +29,34 @@ public final class SampleSenderBinding implements ViewBinding {
   public final ImageView image;
 
   @NonNull
+  public final ImageView playButton;
+
+  @NonNull
+  public final TextView repliedToMessage;
+
+  @NonNull
+  public final TextView repliedToSender;
+
+  @NonNull
+  public final LinearLayout replyLayout;
+
+  @NonNull
   public final TextView senderText;
 
   @NonNull
   public final TextView senderTime;
 
   private SampleSenderBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
-      @NonNull ImageView image, @NonNull TextView senderText, @NonNull TextView senderTime) {
+      @NonNull ImageView image, @NonNull ImageView playButton, @NonNull TextView repliedToMessage,
+      @NonNull TextView repliedToSender, @NonNull LinearLayout replyLayout,
+      @NonNull TextView senderText, @NonNull TextView senderTime) {
     this.rootView = rootView;
     this.barrier = barrier;
     this.image = image;
+    this.playButton = playButton;
+    this.repliedToMessage = repliedToMessage;
+    this.repliedToSender = repliedToSender;
+    this.replyLayout = replyLayout;
     this.senderText = senderText;
     this.senderTime = senderTime;
   }
@@ -81,6 +100,30 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.play_button;
+      ImageView playButton = ViewBindings.findChildViewById(rootView, id);
+      if (playButton == null) {
+        break missingId;
+      }
+
+      id = R.id.replied_to_message;
+      TextView repliedToMessage = ViewBindings.findChildViewById(rootView, id);
+      if (repliedToMessage == null) {
+        break missingId;
+      }
+
+      id = R.id.replied_to_sender;
+      TextView repliedToSender = ViewBindings.findChildViewById(rootView, id);
+      if (repliedToSender == null) {
+        break missingId;
+      }
+
+      id = R.id.reply_layout;
+      LinearLayout replyLayout = ViewBindings.findChildViewById(rootView, id);
+      if (replyLayout == null) {
+        break missingId;
+      }
+
       id = R.id.senderText;
       TextView senderText = ViewBindings.findChildViewById(rootView, id);
       if (senderText == null) {
@@ -93,8 +136,8 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleSenderBinding((RelativeLayout) rootView, barrier, image, senderText,
-          senderTime);
+      return new SampleSenderBinding((RelativeLayout) rootView, barrier, image, playButton,
+          repliedToMessage, repliedToSender, replyLayout, senderText, senderTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

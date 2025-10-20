@@ -2,7 +2,7 @@ package com.example.wechat.Models;
 
 public class MessageModel
 {
-    String uId , message, messageId, imageUrl, repliedToMessage, repliedToSender;
+    String uId , message, messageId, imageUrl, repliedToMessage, repliedToSender, audioUrl;
     Long timeStamp;
     boolean isRead;
 
@@ -84,5 +84,13 @@ public class MessageModel
 
     public void setRepliedToSender(String repliedToSender) {
         this.repliedToSender = repliedToSender;
+    }
+
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
     }
 }

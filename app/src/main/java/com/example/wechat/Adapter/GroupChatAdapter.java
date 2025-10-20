@@ -126,6 +126,18 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
 
             if (holder instanceof SenderViewHolder) {
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
+                if(message.getRepliedToMessage() != null){
+                    senderViewHolder.replyLayout.setVisibility(View.VISIBLE);
+                    senderViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                    if(message.getRepliedToMessage().equals("Photo")){
+                        senderViewHolder.repliedToMessage.setText("Photo");
+                    } else {
+                        senderViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
+                    }
+                } else {
+                    senderViewHolder.replyLayout.setVisibility(View.GONE);
+                }
+
                 if(message.getImageUrl() != null){
                     senderViewHolder.senderMsg.setVisibility(View.GONE);
                     senderViewHolder.image.setVisibility(View.VISIBLE);
@@ -136,6 +148,18 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
                 senderViewHolder.senderTime.setText(formatTime(message.getTimeStamp()));
             } else {
                 ReciverViewHolder reciverViewHolder = (ReciverViewHolder) holder;
+                if(message.getRepliedToMessage() != null){
+                    reciverViewHolder.replyLayout.setVisibility(View.VISIBLE);
+                    reciverViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                    if(message.getRepliedToMessage().equals("Photo")){
+                        reciverViewHolder.repliedToMessage.setText("Photo");
+                    } else {
+                        reciverViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
+                    }
+                } else {
+                    reciverViewHolder.replyLayout.setVisibility(View.GONE);
+                }
+
                 if(message.getImageUrl() != null){
                     reciverViewHolder.reciverMsg.setVisibility(View.GONE);
                     reciverViewHolder.image.setVisibility(View.VISIBLE);
@@ -223,8 +247,9 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
     }
 
     public class ReciverViewHolder extends RecyclerView.ViewHolder {
-        TextView reciverMsg, reciverTime, senderName;
+        TextView reciverMsg, reciverTime, senderName, repliedToSender, repliedToMessage;
         ImageView image;
+        View replyLayout;
 
         public ReciverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -232,18 +257,25 @@ public class GroupChatAdapter extends RecyclerView.Adapter {
             reciverTime = itemView.findViewById(R.id.reciverTime);
             senderName = itemView.findViewById(R.id.senderName);
             image = itemView.findViewById(R.id.image);
+            replyLayout = itemView.findViewById(R.id.reply_layout);
+            repliedToSender = itemView.findViewById(R.id.replied_to_sender);
+            repliedToMessage = itemView.findViewById(R.id.replied_to_message);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
-        TextView senderMsg, senderTime;
+        TextView senderMsg, senderTime, repliedToSender, repliedToMessage;
         ImageView image;
+        View replyLayout;
 
         public SenderViewHolder(@NonNull View itemView) {
             super(itemView);
             senderMsg = itemView.findViewById(R.id.senderText);
             senderTime = itemView.findViewById(R.id.senderTime);
             image = itemView.findViewById(R.id.image);
+            replyLayout = itemView.findViewById(R.id.reply_layout);
+            repliedToSender = itemView.findViewById(R.id.replied_to_sender);
+            repliedToMessage = itemView.findViewById(R.id.replied_to_message);
         }
     }
 }

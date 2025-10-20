@@ -1,9 +1,16 @@
 package com.example.wechat.Models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Users {
     String profilePic, userName, mail, password, userId, lastMessage, status, fcmToken;
     boolean isOnline;
     long lastSeen;
+    boolean muted;
+    Map<String, Boolean> blockedUsers = new HashMap<>();
 
     public Users() {
 
@@ -103,5 +110,21 @@ public class Users {
 
     public void setLastSeen(long lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
+    }
+
+    public Map<String, Boolean> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(Map<String, Boolean> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }

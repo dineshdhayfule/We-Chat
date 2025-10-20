@@ -1,119 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_background"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="24dp"
+    android:background="#1A222C"
+    android:fillViewport="true"
     tools:context=".SignlnActivity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        app:srcCompat="@drawable/ic_wechat" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="WeChat"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/edit_text_background"
-        android:hint="Email or username"
-        android:inputType="textEmailAddress"
-        android:padding="16dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/subtle_text_grey" />
-
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/edit_text_background"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="16dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/subtle_text_grey" />
-
-    <TextView
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="16dp"
-        android:text="Forgot password?"
-        android:textColor="@color/bright_blue_button"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/btnSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/primary_button_background"
-        android:padding="16dp"
-        android:text="Sign In"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Or sign in with"
-        android:textColor="@color/subtle_text_grey"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/btnGoogle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/google_button_background"
-        android:drawableLeft="@drawable/ic_google"
-        android:padding="16dp"
-        android:text="Sign in with Google"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="48dp"
+            android:src="@drawable/ic_wechat"
+            app:civ_border_color="#FFFFFF"
+            app:civ_border_width="2dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Don't have an account? "
-            android:textColor="@color/subtle_text_grey"
+            android:layout_marginTop="24dp"
+            android:text="Welcome Back"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Sign in to continue"
+            android:textColor="#A0AEC0"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Email or username"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:textColor="@color/white"
+            android:textColorHint="#A0AEC0" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#A0AEC0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="#A0AEC0" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:text="Forgot password?"
+            android:textColor="#2563EB"
             android:textSize="14sp" />
 
+        <Button
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/primary_button_background"
+            android:padding="16dp"
+            android:text="Sign In"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
         <TextView
-            android:id="@+id/txtClicktoSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign up"
-            android:textColor="@color/bright_blue_button"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:layout_marginTop="24dp"
+            android:text="OR"
+            android:textColor="#A0AEC0"
+            android:textSize="14sp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/google_button_background"
+            android:drawableLeft="@drawable/ic_google"
+            android:padding="16dp"
+            android:text="Sign in with Google"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don\'t have an account? "
+                android:textColor="#A0AEC0"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtClicktoSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign up"
+                android:textColor="#2563EB"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

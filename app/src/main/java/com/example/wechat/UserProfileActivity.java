@@ -3,12 +3,13 @@ package com.example.wechat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.example.wechat.Models.Users;
 import com.example.wechat.databinding.ActivityUserProfileBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +20,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     ActivityUserProfileBinding binding;
     FirebaseDatabase database;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
         database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         String userId = getIntent().getStringExtra("userId");
 
@@ -44,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             Picasso.get().load(user.getProfilePic()).placeholder(R.drawable.avatar3).into(binding.profileImage);
                             binding.userName.setText(user.getUserName());
                             binding.txtStatus.setText(user.getStatus());
+                            binding.muteSwitch.setChecked(user.isMuted());
                         }
                     }
 
@@ -52,5 +56,23 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     }
                 });
+
+        binding.muteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                database.getReference().child("Users").child(auth.getUid()).child("mutedUsers").child(userId).setValue(isChecked);
+                if(isChecked){
+                    Toast.makeText(UserProfileActivity.this, "Notifications Muted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UserProfileActivity.this, "Notifications Unmuted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        binding.blockUser.setOnClickListener(v -> {
+            database.getReference().child("Users").child(auth.getUid()).child("blockedUsers").child(userId).setValue(true);
+            Toast.makeText(UserProfileActivity.this, "User Blocked", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

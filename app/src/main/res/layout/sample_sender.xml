@@ -54,6 +54,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reply_layout" />
 
+        <ImageView
+            android:id="@+id/play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_arrow"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
         <TextView
             android:id="@+id/senderText"
             android:layout_width="wrap_content"
@@ -64,7 +73,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image"
+            app:layout_constraintTop_toBottomOf="@+id/play_button"
             app:layout_constraintWidth_max="250dp" />
 
         <androidx.constraintlayout.widget.Barrier

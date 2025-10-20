@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -28,22 +29,40 @@ public final class SampleReciverBinding implements ViewBinding {
   public final ImageView image;
 
   @NonNull
+  public final ImageView playButton;
+
+  @NonNull
   public final TextView reciverText;
 
   @NonNull
   public final TextView reciverTime;
 
   @NonNull
+  public final TextView repliedToMessage;
+
+  @NonNull
+  public final TextView repliedToSender;
+
+  @NonNull
+  public final LinearLayout replyLayout;
+
+  @NonNull
   public final TextView senderName;
 
   private SampleReciverBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
-      @NonNull ImageView image, @NonNull TextView reciverText, @NonNull TextView reciverTime,
+      @NonNull ImageView image, @NonNull ImageView playButton, @NonNull TextView reciverText,
+      @NonNull TextView reciverTime, @NonNull TextView repliedToMessage,
+      @NonNull TextView repliedToSender, @NonNull LinearLayout replyLayout,
       @NonNull TextView senderName) {
     this.rootView = rootView;
     this.barrier = barrier;
     this.image = image;
+    this.playButton = playButton;
     this.reciverText = reciverText;
     this.reciverTime = reciverTime;
+    this.repliedToMessage = repliedToMessage;
+    this.repliedToSender = repliedToSender;
+    this.replyLayout = replyLayout;
     this.senderName = senderName;
   }
 
@@ -86,6 +105,12 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.play_button;
+      ImageView playButton = ViewBindings.findChildViewById(rootView, id);
+      if (playButton == null) {
+        break missingId;
+      }
+
       id = R.id.reciverText;
       TextView reciverText = ViewBindings.findChildViewById(rootView, id);
       if (reciverText == null) {
@@ -98,14 +123,32 @@ public final class SampleReciverBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.replied_to_message;
+      TextView repliedToMessage = ViewBindings.findChildViewById(rootView, id);
+      if (repliedToMessage == null) {
+        break missingId;
+      }
+
+      id = R.id.replied_to_sender;
+      TextView repliedToSender = ViewBindings.findChildViewById(rootView, id);
+      if (repliedToSender == null) {
+        break missingId;
+      }
+
+      id = R.id.reply_layout;
+      LinearLayout replyLayout = ViewBindings.findChildViewById(rootView, id);
+      if (replyLayout == null) {
+        break missingId;
+      }
+
       id = R.id.senderName;
       TextView senderName = ViewBindings.findChildViewById(rootView, id);
       if (senderName == null) {
         break missingId;
       }
 
-      return new SampleReciverBinding((RelativeLayout) rootView, barrier, image, reciverText,
-          reciverTime, senderName);
+      return new SampleReciverBinding((RelativeLayout) rootView, barrier, image, playButton,
+          reciverText, reciverTime, repliedToMessage, repliedToSender, replyLayout, senderName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

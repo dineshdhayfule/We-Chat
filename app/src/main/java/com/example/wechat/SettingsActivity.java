@@ -100,6 +100,13 @@ public class SettingsActivity extends AppCompatActivity {
               }
             }
         });
+
+        binding.blockedUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, BlockedUsersActivity.class));
+            }
+        });
     }
 
     @Override

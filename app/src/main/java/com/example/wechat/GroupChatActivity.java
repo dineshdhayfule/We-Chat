@@ -4,19 +4,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.wechat.Adapter.GroupChatAdapter;
 import com.example.wechat.Models.MessageModel;
+import com.example.wechat.Models.Users;
 import com.example.wechat.databinding.ActivityGroupChatBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +52,10 @@ public class GroupChatActivity extends AppCompatActivity {
     GroupChatAdapter chatAdapter;
     FirebaseDatabase database;
     FirebaseStorage storage;
+    MessageModel repliedToMessage = null;
+
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int GALLERY_REQUEST_CODE = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +87,42 @@ public class GroupChatActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                if (chatItems.get(position) instanceof MessageModel) {
+                    repliedToMessage = (MessageModel) chatItems.get(position);
+                    binding.replyLayout.setVisibility(View.VISIBLE);
+                    database.getReference().child("Users").child(repliedToMessage.getuId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                Users user = snapshot.getValue(Users.class);
+                                binding.repliedToSender.setText(user.getUserName());
+                                if(repliedToMessage.getImageUrl() != null){
+                                    binding.repliedToMessage.setText("Photo");
+                                } else {
+                                    binding.repliedToMessage.setText(repliedToMessage.getMessage());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+            }
+        }).attachToRecyclerView(binding.chatRecyclerView);
 
         database.getReference().child("Group Chat")
                 .addValueEventListener(new ValueEventListener() {
@@ -106,9 +157,23 @@ public class GroupChatActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
                             String typingStatus = snapshot.getValue(String.class);
-                            if(!typingStatus.equals(FirebaseAuth.getInstance().getUid())){
-                                binding.typingIndicator.setText(typingStatus + " is typing...");
-                                binding.typingIndicator.setVisibility(View.VISIBLE);
+                            if(!typingStatus.equals(FirebaseAuth.getInstance().getUid()) && !typingStatus.equals("false")){
+                                database.getReference().child("Users").child(typingStatus).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                                        if(userSnapshot.exists()){
+                                            Users user = userSnapshot.getValue(Users.class);
+                                            binding.typingIndicator.setText(user.getUserName() + " is typing...");
+                                            binding.typingIndicator.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
                             } else {
                                 binding.typingIndicator.setVisibility(View.GONE);
                             }
@@ -145,7 +210,19 @@ public class GroupChatActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, 25);
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            }
+        });
+
+        binding.camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(GroupChatActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(GroupChatActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+                } else {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                }
             }
         });
 
@@ -189,6 +266,12 @@ public class GroupChatActivity extends AppCompatActivity {
                 } else {
                     final MessageModel model = new MessageModel(FirebaseAuth.getInstance().getUid(), message);
                     model.setTimeStamp(new Date().getTime());
+                    if(repliedToMessage != null){
+                        model.setRepliedToMessage(repliedToMessage.getMessage());
+                        model.setRepliedToSender(repliedToMessage.getuId());
+                        binding.replyLayout.setVisibility(View.GONE);
+                        repliedToMessage = null;
+                    }
                     binding.enterMessage.setText("");
                     database.getReference().child("Group Chat")
                             .push()
@@ -202,7 +285,7 @@ public class GroupChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
-            if(requestCode == 25){
+            if(requestCode == GALLERY_REQUEST_CODE){
                 if(data.getData() != null){
                     Uri selectedImage = data.getData();
                     final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
@@ -212,10 +295,10 @@ public class GroupChatActivity extends AppCompatActivity {
                             reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    String messageText = uri.toString();
-                                    final MessageModel model = new MessageModel(FirebaseAuth.getInstance().getUid(), messageText);
+                                    String imageUrl = uri.toString();
+                                    final MessageModel model = new MessageModel(FirebaseAuth.getInstance().getUid(), "Photo");
                                     model.setTimeStamp(new Date().getTime());
-                                    model.setImageUrl(messageText);
+                                    model.setImageUrl(imageUrl);
 
                                     database.getReference().child("Group Chat").push().setValue(model);
                                 }
@@ -223,6 +306,41 @@ public class GroupChatActivity extends AppCompatActivity {
                         }
                     });
                 }
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                byte[] bb = bytes.toByteArray();
+                final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
+                reference.putBytes(bb).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                final MessageModel model = new MessageModel(FirebaseAuth.getInstance().getUid(), "Photo");
+                                model.setTimeStamp(new Date().getTime());
+                                model.setImageUrl(imageUrl);
+
+                                database.getReference().child("Group Chat").push().setValue(model);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_REQUEST_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
     }

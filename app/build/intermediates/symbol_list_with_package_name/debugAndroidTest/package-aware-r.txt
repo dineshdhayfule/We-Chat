@@ -1,3 +1,0 @@
-com.example.wechat.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
