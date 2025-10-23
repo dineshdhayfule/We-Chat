@@ -2,7 +2,6 @@ package com.example.wechat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,14 +40,16 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ChatDetailActivity extends AppCompatActivity {
+public class ChatDetailActivity extends BaseActivity {
 
     ActivityChatDetailBinding binding;
     FirebaseAuth auth;
@@ -65,7 +67,8 @@ public class ChatDetailActivity extends AppCompatActivity {
         binding = ActivityChatDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().hide();
+        setWallpaper();
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -105,7 +108,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         });
 
         final ArrayList<Object> chatItems = new ArrayList<>();
-        chatAdapter = new ChatAdapter(chatItems, this, recieveId);
+        chatAdapter = new ChatAdapter(chatItems, this, recieveId, binding.chatRecyclerView);
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
@@ -133,6 +136,11 @@ public class ChatDetailActivity extends AppCompatActivity {
                 }
             }
         }).attachToRecyclerView(binding.chatRecyclerView);
+        
+        binding.cancelReply.setOnClickListener(v -> {
+            repliedToMessage = null;
+            binding.replyLayout.setVisibility(View.GONE);
+        });
 
         final String senderRoom = senderId + recieveId;
         final String receiverRoom = recieveId + senderId;
@@ -204,9 +212,18 @@ public class ChatDetailActivity extends AppCompatActivity {
                         chatItems.clear();
                         long lastTimestamp = 0;
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                            if("placeholder".equals(snapshot1.getKey())){
+                                continue;
+                            }
                             MessageModel model = snapshot1.getValue(MessageModel.class);
                             if (model != null) {
                                 model.setMessageId(snapshot1.getKey());
+
+                                if (!model.getuId().equals(senderId)) {
+                                    HashMap<String, Object> readUpdate = new HashMap<>();
+                                    readUpdate.put("read", true);
+                                    snapshot1.getRef().updateChildren(readUpdate);
+                                }
 
                                 if (!isSameDay(lastTimestamp, model.getTimeStamp())) {
                                     chatItems.add(getFormattedDate(model.getTimeStamp()));
@@ -250,7 +267,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(ChatDetailActivity.this, view);
-                popup.getMenuInflater().inflate(R.menu.chat_menu, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.personal_chat_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemId = item.getItemId();
@@ -260,6 +277,9 @@ public class ChatDetailActivity extends AppCompatActivity {
                         } else if (itemId == R.id.action_delete) {
                             chatAdapter.setMultiSelectMode(true);
                             binding.delete.setVisibility(View.VISIBLE);
+                            return true;
+                        } else if (itemId == R.id.action_settings) {
+                            startActivity(new Intent(ChatDetailActivity.this, SettingsActivity.class));
                             return true;
                         }
                         return false;
@@ -289,7 +309,8 @@ public class ChatDetailActivity extends AppCompatActivity {
                     model.setTimeStamp(new Date().getTime());
                     if(repliedToMessage != null){
                         model.setRepliedToMessage(repliedToMessage.getMessage());
-                        model.setRepliedToSender(repliedToMessage.getuId().equals(senderId) ? "You" : userName);
+                        model.setRepliedToSender(repliedToMessage.getuId());
+                        model.setRepliedToMessageId(repliedToMessage.getMessageId());
                         binding.replyLayout.setVisibility(View.GONE);
                         repliedToMessage = null;
                     }
@@ -398,6 +419,22 @@ public class ChatDetailActivity extends AppCompatActivity {
             binding.delete.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void setWallpaper(){
+        SharedPreferences sharedPreferences = getSharedPreferences("wallpaper", MODE_PRIVATE);
+        int wallpaperId = sharedPreferences.getInt("wallpaperId", 0);
+        String wallpaperUri = sharedPreferences.getString("wallpaperUri", null);
+
+        if(wallpaperId != 0){
+            binding.RelativeLayout.setBackgroundResource(wallpaperId);
+        } else if (wallpaperUri != null){
+            try {
+                binding.RelativeLayout.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(wallpaperUri))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

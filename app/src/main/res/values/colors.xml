@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Modern & Focused Blue -->
+    <color name="main_background_blue">#1D232A</color>
+    <color name="surface_input_field_blue">#374151</color>
+    <color name="primary_accent_blue">#3B82F6</color>
+    <color name="secondary_blue">#4B5563</color>
+    <color name="text_high_emphasis_blue">#F9FAFB</color>
+    <color name="text_medium_emphasis_blue">#9CA3AF</color>
+    <color name="destructive_action_blue">#EF4444</color>
+
+    <!-- Sleek & Vibrant Teal -->
+    <color name="main_background_teal">#111827</color>
+    <color name="surface_input_field_teal">#1F2937</color>
+    <color name="primary_accent_teal">#14B8A6</color>
+    <color name="secondary_teal">#374151</color>
+    <color name="text_high_emphasis_teal">#F9FAFB</color>
+    <color name="text_medium_emphasis_teal">#9CA3AF</color>
+    <color name="destructive_action_teal">#EF4444</color>
+
+
+    <!-- For compatibility with old names -->
+    <color name="main_background">@color/main_background_blue</color>
+    <color name="surface_input_field">@color/surface_input_field_blue</color>
+    <color name="primary_accent">@color/primary_accent_blue</color>
+    <color name="secondary">@color/secondary_blue</color>
+    <color name="text_high_emphasis">@color/text_high_emphasis_blue</color>
+    <color name="text_medium_emphasis">@color/text_medium_emphasis_blue</color>
+    <color name="destructive_action">@color/destructive_action_blue</color>
+
+    <color name="dark_blue_background">@color/main_background_blue</color>
+    <color name="bright_blue_button">@color/primary_accent_blue</color>
+    <color name="subtle_text_grey">@color/text_medium_emphasis_blue</color>
+    <color name="dark_grey">@color/main_background_blue</color>
     <color name="black">#000000</color>
-    <color name="white">#FFFFFFFF</color>
-
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="lightGrey">#EDEDED</color>
-    <color name="whatsAppColor">#0b6156</color>
-    <color name="red">#9F0B0B</color>
-    <color name="status_background">#009688</color>
-    <color name="chat_background">#8BC34A</color>
-    <color name="fb_color">#3c5793</color>
-    <color name="lightgreen">#e5ffcc</color>
-    <color name="settingsIconColor">#0E8374</color>
-    <color name="grayBackground">#BCBCBC</color>
-    <color name="chatbackground">#AAAAAA</color>
-
-    <!-- New Design System Colors -->
-    <color name="dark_blue_background">#1A202C</color>
-    <color name="bright_blue_button">#2563EB</color>
-    <color name="subtle_text_grey">#A0AEC0</color>
-    <color name="input_field_background">#FFFFFF</color>
-    <color name="input_field_border">#000000</color>
-
-    <!-- Message Bubble Colors -->
-    <color name="dark_grey">#121212</color>
-    <color name="sender_bubble_color">#252D31</color>
-    <color name="receiver_bubble_color">#2C3A42</color>
-    <color name="timestamp_color">#B3FFFFFF</color>
-    <color name="read_receipt_color">#4FC3F7</color>
-    <color name="reply_background_color">#3A444E</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">@color/destructive_action_blue</color>
 
 </resources>

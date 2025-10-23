@@ -1,7 +1,6 @@
 package com.example.wechat;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -16,15 +15,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class BlockedUsersActivity extends AppCompatActivity {
+public class BlockedUsersActivity extends BaseActivity {
 
     ActivityBlockedUsersBinding binding;
+    ArrayList<Users> list = new ArrayList<>();
     FirebaseDatabase database;
-    FirebaseAuth auth;
     BlockedUsersAdapter adapter;
-    List<Users> blockedUsersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,51 +31,42 @@ public class BlockedUsersActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         database = FirebaseDatabase.getInstance();
-        auth = FirebaseAuth.getInstance();
-
-        adapter = new BlockedUsersAdapter(blockedUsersList, this);
+        adapter = new BlockedUsersAdapter(list, this);
         binding.blockedUsersRecyclerView.setAdapter(adapter);
         binding.blockedUsersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        fetchBlockedUsers();
-    }
-
-    private void fetchBlockedUsers() {
-        database.getReference().child("Users").child(auth.getUid()).child("blockedUsers").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                blockedUsersList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String userId = dataSnapshot.getKey();
-                    if (userId != null) {
-                        database.getReference().child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot userSnapshot) {
-                                if (userSnapshot.exists()) {
-                                    Users user = userSnapshot.getValue(Users.class);
-                                    user.setUserId(userSnapshot.getKey());
-                                    blockedUsersList.add(user);
-                                    adapter.notifyDataSetChanged();
+        database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("blockedUsers")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        list.clear();
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            database.getReference().child("Users").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                                    if(userSnapshot.exists()){
+                                        Users user = userSnapshot.getValue(Users.class);
+                                        user.setUserId(userSnapshot.getKey());
+                                        list.add(user);
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override

@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-70:12
-INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-70:12
-INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-70:12
-INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-70:12
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:2:1-83:12
 MERGED from [androidx.databinding:viewbinding:8.13.0] C:\Users\DELL\.gradle\caches\8.13\transforms\e4598890393c10ecf8349c8926596702\transformed\viewbinding-8.13.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\DELL\.gradle\caches\8.13\transforms\1a10d8aa98ae40d04bbe8c4cddae5578\transformed\material-1.9.0\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\DELL\.gradle\caches\8.13\transforms\bcb53b0d49254c76f8f137d0e64abf43\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -112,8 +112,8 @@ ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManife
 	android:name
 		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:8:22-68
 application
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:10:5-68:19
-INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:10:5-68:19
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:10:5-81:19
+INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:10:5-81:19
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\DELL\.gradle\caches\8.13\transforms\1a10d8aa98ae40d04bbe8c4cddae5578\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\DELL\.gradle\caches\8.13\transforms\1a10d8aa98ae40d04bbe8c4cddae5578\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\DELL\.gradle\caches\8.13\transforms\bcb53b0d49254c76f8f137d0e64abf43\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -189,101 +189,127 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\DE
 	android:allowBackup
 		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:11:9-35
 	android:theme
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:17:9-44
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:17:9-40
 	android:dataExtractionRules
 		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:12:9-65
-activity#com.example.wechat.NewChatActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:21:9-24:72
+activity#com.example.wechat.AddMembersActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:21:9-23:40
 	android:exported
 		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:23:13-37
-	android:theme
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:24:13-69
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:22:13-44
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:22:13-47
+activity#com.example.wechat.GroupInfoActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:24:9-26:40
+	android:exported
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:26:13-37
+	android:name
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:25:13-46
+activity#com.example.wechat.GroupsActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:27:9-29:40
+	android:exported
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:29:13-37
+	android:name
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:28:13-43
+activity#com.example.wechat.CreateGroupActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:30:9-32:40
+	android:exported
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:32:13-37
+	android:name
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:31:13-48
+activity#com.example.wechat.WallpaperActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:33:9-35:39
+	android:exported
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:35:13-37
+	android:name
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:34:13-46
+activity#com.example.wechat.NewChatActivity
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:36:9-38:39
+	android:exported
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:38:13-37
+	android:name
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:37:13-44
 activity#com.example.wechat.BlockedUsersActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:25:9-28:72
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:39:9-41:39
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:27:13-37
-	android:theme
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:28:13-69
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:41:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:26:13-49
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:40:13-49
 activity#com.example.wechat.ImageViewerActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:29:9-31:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:42:9-44:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:31:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:44:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:30:13-48
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:43:13-48
 activity#com.example.wechat.UserProfileActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:32:9-34:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:45:9-47:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:34:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:47:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:33:13-48
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:46:13-47
 activity#com.example.wechat.SettingsActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:35:9-37:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:48:9-50:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:37:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:50:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:36:13-45
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:49:13-45
 activity#com.example.wechat.GroupChatActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:38:9-40:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:51:9-53:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:40:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:53:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:39:13-46
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:52:13-46
 activity#com.example.wechat.ChatDetailActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:41:9-43:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:54:9-56:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:43:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:56:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:42:13-47
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:55:13-47
 activity#com.example.wechat.SplashActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:44:9-52:20
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:57:9-65:20
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:46:13-36
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:59:13-36
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:45:13-43
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:58:13-43
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:47:13-51:29
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:60:13-64:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:48:17-69
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:61:17-69
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:48:25-66
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:61:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:50:17-77
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:63:17-77
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:50:27-74
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:63:27-74
 activity#com.example.wechat.SignlnActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:53:9-55:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:66:9-68:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:55:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:68:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:54:13-43
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:67:13-43
 activity#com.example.wechat.SignUpActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:56:9-58:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:69:9-71:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:58:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:71:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:57:13-43
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:70:13-43
 activity#com.example.wechat.MainActivity
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:59:9-61:40
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:72:9-74:40
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:61:13-37
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:74:13-37
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:60:13-41
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:73:13-41
 service#com.example.wechat.MyFirebaseMessagingService
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:63:9-67:19
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:76:9-80:19
 	android:exported
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:63:61-85
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:76:61-85
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:63:18-60
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:76:18-60
 intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:64:13-66:29
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:77:13-79:29
 action#com.google.firebase.MESSAGING_EVENT
-ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:65:17-77
+ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:78:17-77
 	android:name
-		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:65:25-75
+		ADDED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml:78:25-75
 uses-sdk
 INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\DELL\AndroidStudioProjects\WeChat\app\src\main\AndroidManifest.xml

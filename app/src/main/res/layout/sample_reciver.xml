@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sender Name"
+            android:textColor="?attr/textColorHighEmphasis"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="You"
-                android:textColor="@color/bright_blue_button"
+                android:textColor="?attr/textColorHighEmphasis"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -52,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This is the message that was replied to."
-                android:textColor="@color/white" />
+                android:textColor="?attr/textColorHighEmphasis" />
         </LinearLayout>
 
         <ImageView
@@ -80,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Hello, User"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/textColorHighEmphasis"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/play_button"
@@ -99,10 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="12:00 pm"
-            android:textColor="@color/timestamp_color"
+            android:textColor="?attr/textColorMediumEmphasis"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/barrier" />
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

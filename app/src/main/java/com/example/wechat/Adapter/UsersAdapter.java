@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wechat.ChatDetailActivity;
-import com.example.wechat.Models.MessageModel;
 import com.example.wechat.Models.Users;
 import com.example.wechat.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,40 +24,68 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
-{
-    ArrayList <Users> list;
+public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> implements Filterable {
+
+    ArrayList<Users> list;
+    ArrayList<Users> listFull;
     Context context;
-    List<String> blockedUsers = new ArrayList<>();
-    boolean showLastMessage;
+    boolean isMultiSelectMode;
+    private int selectedPosition = -1;
+    private ArrayList<Users> selectedUsers = new ArrayList<>();
 
-    public UsersAdapter(ArrayList<Users> list, Context context) {
+    public UsersAdapter(ArrayList<Users> list, Context context, boolean isMultiSelectMode) {
         this.list = list;
+        this.listFull = new ArrayList<>(list);
         this.context = context;
-        this.showLastMessage = true;
-        fetchBlockedUsers();
+        this.isMultiSelectMode = isMultiSelectMode;
     }
 
-    public UsersAdapter(ArrayList<Users> list, Context context, boolean showLastMessage) {
-        this.list = list;
-        this.context = context;
-        this.showLastMessage = showLastMessage;
-        fetchBlockedUsers();
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.sample_show_user, parent, false);
+        return new ViewHolder(view);
     }
 
-    private void fetchBlockedUsers(){
-        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("blockedUsers")
-                .addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Users user = list.get(position);
+        Picasso.get().load(user.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
+        holder.userName.setText(user.getUserName());
+
+        // Set last message
+        FirebaseDatabase.getInstance().getReference().child("chats")
+                .child(FirebaseAuth.getInstance().getUid() + user.getUserId())
+                .orderByChild("timeStamp")
+                .limitToLast(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        blockedUsers.clear();
-                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                            blockedUsers.add(dataSnapshot.getKey());
+                        if (snapshot.hasChildren()) {
+                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                String lastMsg = snapshot1.child("message").getValue(String.class);
+                                if (lastMsg != null) {
+                                    if (lastMsg.length() > 30) {
+                                        holder.lastMessage.setText(lastMsg.substring(0, 30) + "...");
+                                    } else {
+                                        holder.lastMessage.setText(lastMsg);
+                                    }
+                                }
+
+                                Long time = snapshot1.child("timeStamp").getValue(Long.class);
+                                if (time != null) {
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a");
+                                    holder.timestamp.setText(dateFormat.format(new Date(time)));
+                                } else {
+                                    holder.timestamp.setText("");
+                                }
+                            }
                         }
-                        notifyDataSetChanged();
                     }
 
                     @Override
@@ -63,70 +93,28 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
 
                     }
                 });
-    }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
-        View view = LayoutInflater.from(context).inflate(R.layout.sample_show_user,parent,false);
-        return new ViewHolder(view);
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Users users = list.get(position);
-
-        if(blockedUsers.contains(users.getUserId())){
-            holder.itemView.setVisibility(View.GONE);
-            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
-            return;
-        }
-
-        // Safely check for "watcher" user to prevent crashes
-        if ("watcher".equals(users.getUserName())) {
-            holder.image.setImageResource(R.drawable.ic_wechat);
+        if (isMultiSelectMode) {
+            holder.checkbox.setVisibility(View.VISIBLE);
+            holder.checkbox.setChecked(selectedUsers.contains(user));
         } else {
-            Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.avatar3).into(holder.image);
+            holder.checkbox.setVisibility(View.GONE);
         }
 
-        // Safely set user name
-        if (users.getUserName() != null) {
-            holder.userName.setText(users.getUserName());
-        }
-
-        if(showLastMessage) {
-            FirebaseDatabase.getInstance().getReference().child("chats")
-                    .child(FirebaseAuth.getInstance().getUid() + users.getUserId())
-                    .orderByChild("timeStamp")
-                    .limitToLast(1)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.hasChildren()) {
-                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                    holder.lastMessage.setText(snapshot1.child("message").getValue(String.class));
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-        } else {
-            holder.lastMessage.setVisibility(View.GONE);
-        }
-
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.itemView.setOnClickListener(v -> {
+            if (isMultiSelectMode) {
+                if (selectedUsers.contains(user)) {
+                    selectedUsers.remove(user);
+                } else {
+                    selectedUsers.add(user);
+                }
+                notifyItemChanged(position);
+            } else {
                 Intent intent = new Intent(context, ChatDetailActivity.class);
-                intent.putExtra("userId",users.getUserId());
-                intent.putExtra("profilePic",users.getProfilePic());
-                intent.putExtra("userName",users.getUserName());
+                intent.putExtra("userId", user.getUserId());
+                intent.putExtra("profilePic", user.getProfilePic());
+                intent.putExtra("userName", user.getUserName());
                 context.startActivity(intent);
             }
         });
@@ -137,16 +125,61 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    @Override
+    public Filter getFilter() {
+        return userFilter;
+    }
+
+    private Filter userFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Users> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(listFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Users item : listFull) {
+                    if (item.getUserName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            list.clear();
+            list.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public Users getSelectedUser() {
+        if (selectedPosition != -1) {
+            return list.get(selectedPosition);
+        }
+        return null;
+    }
+
+    public ArrayList<Users> getSelectedUsers() {
+        return selectedUsers;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView userName, lastMessage;
+        TextView userName, lastMessage, timestamp;
+        CheckBox checkbox;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image =itemView.findViewById(R.id.profile_image);
-            userName =itemView.findViewById(R.id.userNameList);
+            image = itemView.findViewById(R.id.profile_image);
+            userName = itemView.findViewById(R.id.userNameList);
             lastMessage = itemView.findViewById(R.id.lastMessage);
+            timestamp = itemView.findViewById(R.id.timestamp);
+            checkbox = itemView.findViewById(R.id.checkbox);
         }
     }
 }

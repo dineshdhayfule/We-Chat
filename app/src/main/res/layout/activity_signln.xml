@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A222C"
+    android:background="?attr/mainBackgroundColor"
     android:fillViewport="true"
     tools:context=".SignlnActivity">
 
@@ -21,7 +21,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="48dp"
             android:src="@drawable/ic_wechat"
-            app:civ_border_color="#FFFFFF"
+            app:civ_border_color="?attr/primaryAccentColor"
             app:civ_border_width="2dp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Welcome Back"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColorHighEmphasis"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Sign in to continue"
-            android:textColor="#A0AEC0"
+            android:textColor="?attr/textColorMediumEmphasis"
             android:textSize="16sp" />
 
         <EditText
@@ -50,8 +50,8 @@
             android:hint="Email or username"
             android:inputType="textEmailAddress"
             android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="#A0AEC0" />
+            android:textColor="?attr/textColorHighEmphasis"
+            android:textColorHint="?attr/textColorMediumEmphasis" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             android:layout_marginTop="16dp"
             app:hintEnabled="false"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="#A0AEC0">
+            app:passwordToggleTint="?attr/textColorMediumEmphasis">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtPassword"
@@ -69,8 +69,8 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="16dp"
-                android:textColor="@color/white"
-                android:textColorHint="#A0AEC0" />
+                android:textColor="?attr/textColorHighEmphasis"
+                android:textColorHint="?attr/textColorMediumEmphasis" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +81,7 @@
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:text="Forgot password?"
-            android:textColor="#2563EB"
+            android:textColor="?attr/primaryAccentColor"
             android:textSize="14sp" />
 
         <Button
@@ -93,7 +93,7 @@
             android:padding="16dp"
             android:text="Sign In"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColorHighEmphasis"
             android:textSize="16sp" />
 
         <TextView
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="OR"
-            android:textColor="#A0AEC0"
+            android:textColor="?attr/textColorMediumEmphasis"
             android:textSize="14sp" />
 
         <Button
@@ -114,7 +114,7 @@
             android:padding="16dp"
             android:text="Sign in with Google"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColorHighEmphasis"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -126,8 +126,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don\'t have an account? "
-                android:textColor="#A0AEC0"
+                android:text="Don't have an account? "
+                android:textColor="?attr/textColorMediumEmphasis"
                 android:textSize="14sp" />
 
             <TextView
@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign up"
-                android:textColor="#2563EB"
+                android:textColor="?attr/primaryAccentColor"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>

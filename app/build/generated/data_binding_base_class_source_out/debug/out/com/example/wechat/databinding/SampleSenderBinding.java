@@ -32,6 +32,9 @@ public final class SampleSenderBinding implements ViewBinding {
   public final ImageView playButton;
 
   @NonNull
+  public final ImageView readReceipt;
+
+  @NonNull
   public final TextView repliedToMessage;
 
   @NonNull
@@ -47,13 +50,15 @@ public final class SampleSenderBinding implements ViewBinding {
   public final TextView senderTime;
 
   private SampleSenderBinding(@NonNull RelativeLayout rootView, @NonNull Barrier barrier,
-      @NonNull ImageView image, @NonNull ImageView playButton, @NonNull TextView repliedToMessage,
-      @NonNull TextView repliedToSender, @NonNull LinearLayout replyLayout,
-      @NonNull TextView senderText, @NonNull TextView senderTime) {
+      @NonNull ImageView image, @NonNull ImageView playButton, @NonNull ImageView readReceipt,
+      @NonNull TextView repliedToMessage, @NonNull TextView repliedToSender,
+      @NonNull LinearLayout replyLayout, @NonNull TextView senderText,
+      @NonNull TextView senderTime) {
     this.rootView = rootView;
     this.barrier = barrier;
     this.image = image;
     this.playButton = playButton;
+    this.readReceipt = readReceipt;
     this.repliedToMessage = repliedToMessage;
     this.repliedToSender = repliedToSender;
     this.replyLayout = replyLayout;
@@ -106,6 +111,12 @@ public final class SampleSenderBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.read_receipt;
+      ImageView readReceipt = ViewBindings.findChildViewById(rootView, id);
+      if (readReceipt == null) {
+        break missingId;
+      }
+
       id = R.id.replied_to_message;
       TextView repliedToMessage = ViewBindings.findChildViewById(rootView, id);
       if (repliedToMessage == null) {
@@ -137,7 +148,7 @@ public final class SampleSenderBinding implements ViewBinding {
       }
 
       return new SampleSenderBinding((RelativeLayout) rootView, barrier, image, playButton,
-          repliedToMessage, repliedToSender, replyLayout, senderText, senderTime);
+          readReceipt, repliedToMessage, repliedToSender, replyLayout, senderText, senderTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

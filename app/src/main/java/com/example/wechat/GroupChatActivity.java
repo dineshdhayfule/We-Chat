@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -39,20 +40,24 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class GroupChatActivity extends AppCompatActivity {
+public class GroupChatActivity extends BaseActivity {
 
     ActivityGroupChatBinding binding;
     GroupChatAdapter chatAdapter;
     FirebaseDatabase database;
     FirebaseStorage storage;
     MessageModel repliedToMessage = null;
+    String groupId;
+    String groupName;
 
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 25;
@@ -63,30 +68,31 @@ public class GroupChatActivity extends AppCompatActivity {
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().hide();
+        setWallpaper();
+
+        groupId = getIntent().getStringExtra("groupId");
+        groupName = getIntent().getStringExtra("groupName");
+
+        binding.userName.setText(groupName);
+
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        binding.backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (chatAdapter.isMultiSelectMode()) {
-                    chatAdapter.setMultiSelectMode(false);
-                    binding.delete.setVisibility(View.GONE);
-                } else {
-                    Intent intent = new Intent(GroupChatActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+        binding.backArrow.setOnClickListener(view -> finish());
+
+        binding.profileImage.setOnClickListener(v -> openGroupInfo());
+        binding.userName.setOnClickListener(v -> openGroupInfo());
 
         final ArrayList<Object> chatItems = new ArrayList<>();
 
-        chatAdapter = new GroupChatAdapter(chatItems, this);
+        chatAdapter = new GroupChatAdapter(chatItems, this, binding.chatRecyclerView);
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+
+        final String chatNode = "general".equals(groupId) ? "Group Chat" : "group_messages/" + groupId;
+        final String currentUserId = FirebaseAuth.getInstance().getUid();
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -124,7 +130,12 @@ public class GroupChatActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(binding.chatRecyclerView);
 
-        database.getReference().child("Group Chat")
+        binding.cancelReply.setOnClickListener(v -> {
+            repliedToMessage = null;
+            binding.replyLayout.setVisibility(View.GONE);
+        });
+
+        database.getReference().child(chatNode)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -134,6 +145,12 @@ public class GroupChatActivity extends AppCompatActivity {
                             MessageModel model = snapshot1.getValue(MessageModel.class);
                             if (model != null) {
                                 model.setMessageId(snapshot1.getKey());
+
+                                if (!model.getuId().equals(currentUserId)) {
+                                    HashMap<String, Object> readUpdate = new HashMap<>();
+                                    readUpdate.put("read", true);
+                                    snapshot1.getRef().updateChildren(readUpdate);
+                                }
 
                                 if (!isSameDay(lastTimestamp, model.getTimeStamp())) {
                                     chatItems.add(getFormattedDate(model.getTimeStamp()));
@@ -151,7 +168,7 @@ public class GroupChatActivity extends AppCompatActivity {
                     }
                 });
 
-        database.getReference().child("typingStatus").child("group")
+        database.getReference().child("typingStatus").child(groupId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -194,9 +211,9 @@ public class GroupChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                database.getReference().child("typingStatus").child("group").setValue(FirebaseAuth.getInstance().getUid());
+                database.getReference().child("typingStatus").child(groupId).setValue(FirebaseAuth.getInstance().getUid());
                 handler.removeCallbacksAndMessages(null);
-                handler.postDelayed(() -> database.getReference().child("typingStatus").child("group").setValue("false"), 2000);
+                handler.postDelayed(() -> database.getReference().child("typingStatus").child(groupId).setValue("false"), 2000);
             }
 
             @Override
@@ -235,11 +252,14 @@ public class GroupChatActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemId = item.getItemId();
                         if (itemId == R.id.action_clear_chat) {
-                            database.getReference().child("Group Chat").removeValue();
+                            database.getReference().child(chatNode).removeValue();
                             return true;
                         } else if (itemId == R.id.action_delete) {
                             chatAdapter.setMultiSelectMode(true);
-                            binding.delete.setVisibility(View.VISIBLE);
+                            binding.deleteLayout.setVisibility(View.VISIBLE);
+                            return true;
+                        } else if (itemId == R.id.action_group_info) {
+                            openGroupInfo();
                             return true;
                         }
                         return false;
@@ -252,10 +272,10 @@ public class GroupChatActivity extends AppCompatActivity {
         binding.delete.setOnClickListener(v -> {
             List<MessageModel> selectedMessages = chatAdapter.getSelectedMessages();
             for (MessageModel message : selectedMessages) {
-                database.getReference().child("Group Chat").child(message.getMessageId()).removeValue();
+                database.getReference().child(chatNode).child(message.getMessageId()).removeValue();
             }
             chatAdapter.setMultiSelectMode(false);
-            binding.delete.setVisibility(View.GONE);
+            binding.deleteLayout.setVisibility(View.GONE);
         });
 
         binding.send.setOnClickListener(new View.OnClickListener() {
@@ -269,11 +289,12 @@ public class GroupChatActivity extends AppCompatActivity {
                     if(repliedToMessage != null){
                         model.setRepliedToMessage(repliedToMessage.getMessage());
                         model.setRepliedToSender(repliedToMessage.getuId());
+                        model.setRepliedToMessageId(repliedToMessage.getMessageId());
                         binding.replyLayout.setVisibility(View.GONE);
                         repliedToMessage = null;
                     }
                     binding.enterMessage.setText("");
-                    database.getReference().child("Group Chat")
+                    database.getReference().child(chatNode)
                             .push()
                             .setValue(model);
                 }
@@ -281,9 +302,16 @@ public class GroupChatActivity extends AppCompatActivity {
         });
     }
 
+    private void openGroupInfo(){
+        Intent intent = new Intent(GroupChatActivity.this, GroupInfoActivity.class);
+        intent.putExtra("groupId", groupId);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        final String chatNode = "general".equals(groupId) ? "Group Chat" : "group_messages/" + groupId;
         if(resultCode == RESULT_OK){
             if(requestCode == GALLERY_REQUEST_CODE){
                 if(data.getData() != null){
@@ -300,7 +328,7 @@ public class GroupChatActivity extends AppCompatActivity {
                                     model.setTimeStamp(new Date().getTime());
                                     model.setImageUrl(imageUrl);
 
-                                    database.getReference().child("Group Chat").push().setValue(model);
+                                    database.getReference().child(chatNode).push().setValue(model);
                                 }
                             });
                         }
@@ -323,7 +351,7 @@ public class GroupChatActivity extends AppCompatActivity {
                                 model.setTimeStamp(new Date().getTime());
                                 model.setImageUrl(imageUrl);
 
-                                database.getReference().child("Group Chat").push().setValue(model);
+                                database.getReference().child(chatNode).push().setValue(model);
                             }
                         });
                     }
@@ -335,7 +363,7 @@ public class GroupChatActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == CAMERA_REQUEST_CODE){
+       if(requestCode == CAMERA_REQUEST_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
@@ -345,11 +373,27 @@ public class GroupChatActivity extends AppCompatActivity {
         }
     }
 
+    private void setWallpaper(){
+        SharedPreferences sharedPreferences = getSharedPreferences("wallpaper", MODE_PRIVATE);
+        int wallpaperId = sharedPreferences.getInt("wallpaperId", 0);
+        String wallpaperUri = sharedPreferences.getString("wallpaperUri", null);
+
+        if(wallpaperId != 0){
+            binding.relativeLayout.setBackgroundResource(wallpaperId);
+        } else if (wallpaperUri != null){
+            try {
+                binding.relativeLayout.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(wallpaperUri))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } 
+    }
+
     @Override
     public void onBackPressed() {
         if (chatAdapter.isMultiSelectMode()) {
             chatAdapter.setMultiSelectMode(false);
-            binding.delete.setVisibility(View.GONE);
+            binding.deleteLayout.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
         }

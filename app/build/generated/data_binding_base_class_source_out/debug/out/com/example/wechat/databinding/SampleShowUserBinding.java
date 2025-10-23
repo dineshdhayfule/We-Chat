@@ -4,7 +4,8 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +19,10 @@ import java.lang.String;
 
 public final class SampleShowUserBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final RelativeLayout rootView;
+
+  @NonNull
+  public final CheckBox checkbox;
 
   @NonNull
   public final TextView lastMessage;
@@ -27,19 +31,25 @@ public final class SampleShowUserBinding implements ViewBinding {
   public final CircleImageView profileImage;
 
   @NonNull
+  public final TextView timestamp;
+
+  @NonNull
   public final TextView userNameList;
 
-  private SampleShowUserBinding(@NonNull LinearLayout rootView, @NonNull TextView lastMessage,
-      @NonNull CircleImageView profileImage, @NonNull TextView userNameList) {
+  private SampleShowUserBinding(@NonNull RelativeLayout rootView, @NonNull CheckBox checkbox,
+      @NonNull TextView lastMessage, @NonNull CircleImageView profileImage,
+      @NonNull TextView timestamp, @NonNull TextView userNameList) {
     this.rootView = rootView;
+    this.checkbox = checkbox;
     this.lastMessage = lastMessage;
     this.profileImage = profileImage;
+    this.timestamp = timestamp;
     this.userNameList = userNameList;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public RelativeLayout getRoot() {
     return rootView;
   }
 
@@ -64,6 +74,12 @@ public final class SampleShowUserBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.checkbox;
+      CheckBox checkbox = ViewBindings.findChildViewById(rootView, id);
+      if (checkbox == null) {
+        break missingId;
+      }
+
       id = R.id.lastMessage;
       TextView lastMessage = ViewBindings.findChildViewById(rootView, id);
       if (lastMessage == null) {
@@ -76,14 +92,20 @@ public final class SampleShowUserBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.timestamp;
+      TextView timestamp = ViewBindings.findChildViewById(rootView, id);
+      if (timestamp == null) {
+        break missingId;
+      }
+
       id = R.id.userNameList;
       TextView userNameList = ViewBindings.findChildViewById(rootView, id);
       if (userNameList == null) {
         break missingId;
       }
 
-      return new SampleShowUserBinding((LinearLayout) rootView, lastMessage, profileImage,
-          userNameList);
+      return new SampleShowUserBinding((RelativeLayout) rootView, checkbox, lastMessage,
+          profileImage, timestamp, userNameList);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

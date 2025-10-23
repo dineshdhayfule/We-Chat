@@ -2,7 +2,6 @@ package com.example.wechat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -33,7 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class SignlnActivity extends AppCompatActivity {
+public class SignlnActivity extends BaseActivity {
 
     ActivitySignlnBinding binding;
     FirebaseDatabase database;
@@ -48,7 +47,6 @@ public class SignlnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignlnBinding.inflate(getLayoutInflater());
         setContentView(binding. getRoot());
-        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth. getInstance();
         database = FirebaseDatabase.getInstance();

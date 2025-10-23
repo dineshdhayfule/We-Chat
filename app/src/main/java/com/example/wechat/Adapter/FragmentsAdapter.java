@@ -9,8 +9,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.wechat.Fragments.ChatsFragment;
 
 public class FragmentsAdapter extends FragmentStatePagerAdapter {
+    private ChatsFragment chatsFragment;
+
     public FragmentsAdapter(@NonNull FragmentManager fm) {
         super(fm);
+        chatsFragment = new ChatsFragment();
     }
 
     @NonNull
@@ -19,8 +22,8 @@ public class FragmentsAdapter extends FragmentStatePagerAdapter {
     {
        switch (position)
        {
-           case 0 : return new ChatsFragment();
-           default: return new ChatsFragment();
+           case 0 : return chatsFragment;
+           default: return chatsFragment;
        }
     }
 
@@ -41,5 +44,9 @@ public class FragmentsAdapter extends FragmentStatePagerAdapter {
 
 
         return title;
+    }
+
+    public ChatsFragment getChatsFragment() {
+        return chatsFragment;
     }
 }

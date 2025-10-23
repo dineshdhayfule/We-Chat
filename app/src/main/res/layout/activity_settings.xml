@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="?attr/mainBackgroundColor"
     tools:context=".SettingsActivity">
 
     <ImageView
@@ -16,7 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         app:srcCompat="@drawable/arrow_back_24"
-        />
+        app:tint="?attr/textColorHighEmphasis" />
 
     <LinearLayout
         android:id="@+id/linear"
@@ -40,7 +40,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/avatar3"
-            app:civ_border_color="#FFFFFF"
+            app:civ_border_color="?attr/primaryAccentColor"
             app:civ_border_width="2dp" />
 
         <ImageView
@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:padding="5dp"
-                android:text="User Name:"
-                android:textColor="@color/lightGrey"
+                android.text="User Name:"
+                android:textColor="?attr/textColorMediumEmphasis"
                 android:textSize="14sp" />
 
             <EditText
@@ -75,8 +75,8 @@
                 android:hint="UserName"
                 android:inputType="textPersonName"
                 android:padding="15dp"
-                android:textColor="@color/white"
-                android:textColorHint="#BBAEAE" />
+                android:textColor="?attr/textColorHighEmphasis"
+                android:textColorHint="?attr/textColorMediumEmphasis" />
 
         </LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="15dp"
                 android:padding="5dp"
                 android:text="About:"
-                android:textColor="@color/lightGrey"
+                android:textColor="?attr/textColorMediumEmphasis"
                 android:textSize="14sp" />
 
             <EditText
@@ -102,8 +102,8 @@
                 android:hint="About"
                 android:inputType="textPersonName"
                 android:padding="15dp"
-                android:textColor="@color/white"
-                android:textColorHint="#BBAEAE" />
+                android:textColor="?attr/textColorHighEmphasis"
+                android:textColorHint="?attr/textColorMediumEmphasis" />
 
         </LinearLayout>
 
@@ -115,26 +115,73 @@
             android:layout_marginStart="130dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/primary_button_background"
             android:text="Save"
             android:textAllCaps="false"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColorHighEmphasis" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/blocked_users"
+        android:id="@+id/themes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/linear"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/ic_palette"
+        android:drawablePadding="18dp"
+        android:padding="10dp"
+        android:text="Themes"
+        android:textColor="?attr/textColorHighEmphasis"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/change_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/themes"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_wallpaper"
+        android:drawablePadding="18dp"
+        android:padding="10dp"
+        android:text="Change Wallpaper"
+        android:textColor="?attr/textColorHighEmphasis"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/blocked_users"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/change_wallpaper"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
         android:drawableLeft="@drawable/ic_block"
         android:drawablePadding="21dp"
         android:padding="10dp"
         android:text="Blocked Users"
-        android:textColor="@color/white"
+        android:textColor="?attr/textColorHighEmphasis"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/log_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/blocked_users"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_logout"
+        android:drawablePadding="21dp"
+        android:padding="10dp"
+        android:text="Log Out"
+        android:textColor="?attr/destructiveActionColor"
         android:textSize="18sp"
         android:textStyle="bold" />
 

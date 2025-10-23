@@ -31,7 +31,13 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView blockedUsers;
 
   @NonNull
+  public final TextView changeWallpaper;
+
+  @NonNull
   public final LinearLayout linear;
+
+  @NonNull
+  public final TextView logOut;
 
   @NonNull
   public final ImageView plus;
@@ -43,22 +49,29 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final AppCompatButton saveButton;
 
   @NonNull
+  public final TextView themes;
+
+  @NonNull
   public final EditText txtStatus;
 
   @NonNull
   public final EditText txtUserName;
 
   private ActivitySettingsBinding(@NonNull RelativeLayout rootView, @NonNull ImageView backArrow,
-      @NonNull TextView blockedUsers, @NonNull LinearLayout linear, @NonNull ImageView plus,
+      @NonNull TextView blockedUsers, @NonNull TextView changeWallpaper,
+      @NonNull LinearLayout linear, @NonNull TextView logOut, @NonNull ImageView plus,
       @NonNull CircleImageView profileImage, @NonNull AppCompatButton saveButton,
-      @NonNull EditText txtStatus, @NonNull EditText txtUserName) {
+      @NonNull TextView themes, @NonNull EditText txtStatus, @NonNull EditText txtUserName) {
     this.rootView = rootView;
     this.backArrow = backArrow;
     this.blockedUsers = blockedUsers;
+    this.changeWallpaper = changeWallpaper;
     this.linear = linear;
+    this.logOut = logOut;
     this.plus = plus;
     this.profileImage = profileImage;
     this.saveButton = saveButton;
+    this.themes = themes;
     this.txtStatus = txtStatus;
     this.txtUserName = txtUserName;
   }
@@ -102,9 +115,21 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.change_wallpaper;
+      TextView changeWallpaper = ViewBindings.findChildViewById(rootView, id);
+      if (changeWallpaper == null) {
+        break missingId;
+      }
+
       id = R.id.linear;
       LinearLayout linear = ViewBindings.findChildViewById(rootView, id);
       if (linear == null) {
+        break missingId;
+      }
+
+      id = R.id.log_out;
+      TextView logOut = ViewBindings.findChildViewById(rootView, id);
+      if (logOut == null) {
         break missingId;
       }
 
@@ -126,6 +151,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.themes;
+      TextView themes = ViewBindings.findChildViewById(rootView, id);
+      if (themes == null) {
+        break missingId;
+      }
+
       id = R.id.txtStatus;
       EditText txtStatus = ViewBindings.findChildViewById(rootView, id);
       if (txtStatus == null) {
@@ -138,8 +169,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, blockedUsers, linear,
-          plus, profileImage, saveButton, txtStatus, txtUserName);
+      return new ActivitySettingsBinding((RelativeLayout) rootView, backArrow, blockedUsers,
+          changeWallpaper, linear, logOut, plus, profileImage, saveButton, themes, txtStatus,
+          txtUserName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -8,21 +8,23 @@ A modern Android chat application built with cutting-edge technologies for seaml
 
 ## ✨ Features
 
-- 💬 Real-time messaging
-- 👥 Group chats
-- 🌙 Dark/Light theme support
-- 🔒 Secure messaging
-- 👤 User profiles
-- 📱 Modern Material Design UI
+- 💬 Real-time one-on-one messaging
+- 👥 Multi-user group chats with the ability to create new groups
+- 🎨 Dual-theme support with a "Modern Blue" and a "Sleek Teal" option
+- 🔒 Secure messaging with Firebase Authentication
+- 👤 User profiles with customizable avatars and statuses
+- 📸 Photo sharing in both one-on-one and group chats
+- ↩️ "Tap to Reply" functionality in conversations
+- ✔️ Message read receipts (double-tick system)
 
 ## 🛠️ Technologies Used
 
-- **Language**: Java/Kotlin
+- **Language**: Java
 - **IDE**: Android Studio
-- **Database**: Firebase/SQLite
-- **Authentication**: Firebase Auth
-- **Real-time Communication**: Firebase Realtime Database/Firestore
-- **Image Loading**: Glide/Picasso
+- **Database**: Firebase Realtime Database
+- **Authentication**: Firebase Authentication
+- **Storage**: Firebase Storage for images
+- **Image Loading**: Picasso
 - **UI Components**: Material Design Components
 
 ## 📋 Requirements
@@ -33,10 +35,10 @@ A modern Android chat application built with cutting-edge technologies for seaml
 
 ## 🚀 Installation
 
-1. Download the APK from the link above
-2. Enable "Install from Unknown Sources" in your device settings
-3. Install the APK file
-4. Grant necessary permissions when prompted
+1. Download the APK from the link above.
+2. Enable "Install from Unknown Sources" in your device settings.
+3. Install the APK file.
+4. Grant necessary permissions when prompted.
 
 ## 🏗️ Building from Source
 
@@ -45,25 +47,25 @@ A modern Android chat application built with cutting-edge technologies for seaml
    git clone https://github.com/dineshdhayfule/We-Chat.git
    ```
 
-2. Open the project in Android Studio
+2. Open the project in Android Studio.
 
-3. Sync the project with Gradle files
+3. Sync the project with Gradle files.
 
-4. Configure Firebase (if applicable):
-   - Add your `google-services.json` file to the `app/` directory
-   - Update Firebase configuration
+4. Configure Firebase:
+   - Add your `google-services.json` file to the `app/` directory.
+   - Update Firebase configuration if necessary.
 
-5. Build and run the project
+5. Build and run the project.
 
 
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
 
 ## 📝 License
 
@@ -84,5 +86,4 @@ If you like this project, please give it a ⭐ on GitHub!
 
 ---
 
-*Made with ❤️ by Dinesh Dhayfule*# We-Chat
-# We-Chat
+*Made with ❤️ by Dinesh Dhayfule*

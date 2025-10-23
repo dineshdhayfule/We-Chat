@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="?attr/mainBackgroundColor"
     tools:context=".BlockedUsersActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/black"
+        android:background="?attr/mainBackgroundColor"
         app:title="Blocked Users"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="?attr/textColorHighEmphasis" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/blockedUsersRecyclerView"

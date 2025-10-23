@@ -2,12 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:background="?attr/mainBackgroundColor"
+    android:padding="16dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/avatar3" />
 
     <TextView
@@ -18,7 +20,7 @@
         android:layout_marginStart="16dp"
         android:layout_toEndOf="@id/profile_image"
         android:text="User Name"
-        android:textColor="@color/white"
+        android:textColor="?attr/textColorHighEmphasis"
         android:textSize="18sp" />
 
     <Button
@@ -27,6 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:text="Unblock" />
+        android:backgroundTint="?attr/primaryAccentColor"
+        android:text="Unblock"
+        android:textColor="?attr/textColorHighEmphasis" />
 
 </RelativeLayout>

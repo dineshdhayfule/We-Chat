@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -39,6 +39,9 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final ImageView camera;
 
   @NonNull
+  public final ImageView cancelReply;
+
+  @NonNull
   public final RecyclerView chatRecyclerView;
 
   @NonNull
@@ -51,13 +54,10 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final TextView lastSeen;
 
   @NonNull
-  public final RelativeLayout linear;
+  public final LinearLayout linear;
 
   @NonNull
   public final ImageView menu;
-
-  @NonNull
-  public final LinearLayout messageInputLayout;
 
   @NonNull
   public final CircleImageView profileImage;
@@ -69,19 +69,13 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final TextView repliedToSender;
 
   @NonNull
-  public final LinearLayout replyLayout;
+  public final RelativeLayout replyLayout;
 
   @NonNull
-  public final LinearLayout replyLayoutContainer;
+  public final FloatingActionButton send;
 
   @NonNull
-  public final ImageView send;
-
-  @NonNull
-  public final FrameLayout sendLayout;
-
-  @NonNull
-  public final Toolbar toolBar;
+  public final Toolbar toolbar;
 
   @NonNull
   public final TextView typingIndicator;
@@ -91,35 +85,31 @@ public final class ActivityChatDetailBinding implements ViewBinding {
 
   private ActivityChatDetailBinding(@NonNull RelativeLayout rootView,
       @NonNull RelativeLayout RelativeLayout, @NonNull ImageView attachment,
-      @NonNull ImageView backArrow, @NonNull ImageView camera,
+      @NonNull ImageView backArrow, @NonNull ImageView camera, @NonNull ImageView cancelReply,
       @NonNull RecyclerView chatRecyclerView, @NonNull ImageView delete,
-      @NonNull EditText enterMessage, @NonNull TextView lastSeen, @NonNull RelativeLayout linear,
-      @NonNull ImageView menu, @NonNull LinearLayout messageInputLayout,
-      @NonNull CircleImageView profileImage, @NonNull TextView repliedToMessage,
-      @NonNull TextView repliedToSender, @NonNull LinearLayout replyLayout,
-      @NonNull LinearLayout replyLayoutContainer, @NonNull ImageView send,
-      @NonNull FrameLayout sendLayout, @NonNull Toolbar toolBar, @NonNull TextView typingIndicator,
-      @NonNull TextView userName) {
+      @NonNull EditText enterMessage, @NonNull TextView lastSeen, @NonNull LinearLayout linear,
+      @NonNull ImageView menu, @NonNull CircleImageView profileImage,
+      @NonNull TextView repliedToMessage, @NonNull TextView repliedToSender,
+      @NonNull RelativeLayout replyLayout, @NonNull FloatingActionButton send,
+      @NonNull Toolbar toolbar, @NonNull TextView typingIndicator, @NonNull TextView userName) {
     this.rootView = rootView;
     this.RelativeLayout = RelativeLayout;
     this.attachment = attachment;
     this.backArrow = backArrow;
     this.camera = camera;
+    this.cancelReply = cancelReply;
     this.chatRecyclerView = chatRecyclerView;
     this.delete = delete;
     this.enterMessage = enterMessage;
     this.lastSeen = lastSeen;
     this.linear = linear;
     this.menu = menu;
-    this.messageInputLayout = messageInputLayout;
     this.profileImage = profileImage;
     this.repliedToMessage = repliedToMessage;
     this.repliedToSender = repliedToSender;
     this.replyLayout = replyLayout;
-    this.replyLayoutContainer = replyLayoutContainer;
     this.send = send;
-    this.sendLayout = sendLayout;
-    this.toolBar = toolBar;
+    this.toolbar = toolbar;
     this.typingIndicator = typingIndicator;
     this.userName = userName;
   }
@@ -171,6 +161,12 @@ public final class ActivityChatDetailBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.cancel_reply;
+      ImageView cancelReply = ViewBindings.findChildViewById(rootView, id);
+      if (cancelReply == null) {
+        break missingId;
+      }
+
       id = R.id.chatRecyclerView;
       RecyclerView chatRecyclerView = ViewBindings.findChildViewById(rootView, id);
       if (chatRecyclerView == null) {
@@ -189,14 +185,14 @@ public final class ActivityChatDetailBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.last_seen;
+      id = R.id.lastSeen;
       TextView lastSeen = ViewBindings.findChildViewById(rootView, id);
       if (lastSeen == null) {
         break missingId;
       }
 
       id = R.id.linear;
-      RelativeLayout linear = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout linear = ViewBindings.findChildViewById(rootView, id);
       if (linear == null) {
         break missingId;
       }
@@ -204,12 +200,6 @@ public final class ActivityChatDetailBinding implements ViewBinding {
       id = R.id.menu;
       ImageView menu = ViewBindings.findChildViewById(rootView, id);
       if (menu == null) {
-        break missingId;
-      }
-
-      id = R.id.message_input_layout;
-      LinearLayout messageInputLayout = ViewBindings.findChildViewById(rootView, id);
-      if (messageInputLayout == null) {
         break missingId;
       }
 
@@ -232,36 +222,24 @@ public final class ActivityChatDetailBinding implements ViewBinding {
       }
 
       id = R.id.reply_layout;
-      LinearLayout replyLayout = ViewBindings.findChildViewById(rootView, id);
+      RelativeLayout replyLayout = ViewBindings.findChildViewById(rootView, id);
       if (replyLayout == null) {
         break missingId;
       }
 
-      id = R.id.reply_layout_container;
-      LinearLayout replyLayoutContainer = ViewBindings.findChildViewById(rootView, id);
-      if (replyLayoutContainer == null) {
-        break missingId;
-      }
-
       id = R.id.send;
-      ImageView send = ViewBindings.findChildViewById(rootView, id);
+      FloatingActionButton send = ViewBindings.findChildViewById(rootView, id);
       if (send == null) {
         break missingId;
       }
 
-      id = R.id.send_layout;
-      FrameLayout sendLayout = ViewBindings.findChildViewById(rootView, id);
-      if (sendLayout == null) {
+      id = R.id.toolbar;
+      Toolbar toolbar = ViewBindings.findChildViewById(rootView, id);
+      if (toolbar == null) {
         break missingId;
       }
 
-      id = R.id.toolBar;
-      Toolbar toolBar = ViewBindings.findChildViewById(rootView, id);
-      if (toolBar == null) {
-        break missingId;
-      }
-
-      id = R.id.typing_indicator;
+      id = R.id.typingIndicator;
       TextView typingIndicator = ViewBindings.findChildViewById(rootView, id);
       if (typingIndicator == null) {
         break missingId;
@@ -274,9 +252,9 @@ public final class ActivityChatDetailBinding implements ViewBinding {
       }
 
       return new ActivityChatDetailBinding((RelativeLayout) rootView, RelativeLayout, attachment,
-          backArrow, camera, chatRecyclerView, delete, enterMessage, lastSeen, linear, menu,
-          messageInputLayout, profileImage, repliedToMessage, repliedToSender, replyLayout,
-          replyLayoutContainer, send, sendLayout, toolBar, typingIndicator, userName);
+          backArrow, camera, cancelReply, chatRecyclerView, delete, enterMessage, lastSeen, linear,
+          menu, profileImage, repliedToMessage, repliedToSender, replyLayout, send, toolbar,
+          typingIndicator, userName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

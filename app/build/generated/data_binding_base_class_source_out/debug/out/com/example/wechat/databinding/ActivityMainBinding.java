@@ -4,6 +4,8 @@ package com.example.wechat.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +13,6 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import androidx.viewpager.widget.ViewPager;
 import com.example.wechat.R;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -22,19 +23,33 @@ public final class ActivityMainBinding implements ViewBinding {
   private final RelativeLayout rootView;
 
   @NonNull
-  public final AppBarLayout appBarLayout;
+  public final FloatingActionButton fabNewChat;
 
   @NonNull
-  public final FloatingActionButton fabNewChat;
+  public final ImageView groupIcon;
+
+  @NonNull
+  public final ImageView searchIcon;
+
+  @NonNull
+  public final ImageView settingsIcon;
+
+  @NonNull
+  public final LinearLayout toolbarLayout;
 
   @NonNull
   public final ViewPager viewPager;
 
-  private ActivityMainBinding(@NonNull RelativeLayout rootView, @NonNull AppBarLayout appBarLayout,
-      @NonNull FloatingActionButton fabNewChat, @NonNull ViewPager viewPager) {
+  private ActivityMainBinding(@NonNull RelativeLayout rootView,
+      @NonNull FloatingActionButton fabNewChat, @NonNull ImageView groupIcon,
+      @NonNull ImageView searchIcon, @NonNull ImageView settingsIcon,
+      @NonNull LinearLayout toolbarLayout, @NonNull ViewPager viewPager) {
     this.rootView = rootView;
-    this.appBarLayout = appBarLayout;
     this.fabNewChat = fabNewChat;
+    this.groupIcon = groupIcon;
+    this.searchIcon = searchIcon;
+    this.settingsIcon = settingsIcon;
+    this.toolbarLayout = toolbarLayout;
     this.viewPager = viewPager;
   }
 
@@ -65,15 +80,33 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.appBarLayout;
-      AppBarLayout appBarLayout = ViewBindings.findChildViewById(rootView, id);
-      if (appBarLayout == null) {
-        break missingId;
-      }
-
       id = R.id.fabNewChat;
       FloatingActionButton fabNewChat = ViewBindings.findChildViewById(rootView, id);
       if (fabNewChat == null) {
+        break missingId;
+      }
+
+      id = R.id.group_icon;
+      ImageView groupIcon = ViewBindings.findChildViewById(rootView, id);
+      if (groupIcon == null) {
+        break missingId;
+      }
+
+      id = R.id.search_icon;
+      ImageView searchIcon = ViewBindings.findChildViewById(rootView, id);
+      if (searchIcon == null) {
+        break missingId;
+      }
+
+      id = R.id.settings_icon;
+      ImageView settingsIcon = ViewBindings.findChildViewById(rootView, id);
+      if (settingsIcon == null) {
+        break missingId;
+      }
+
+      id = R.id.toolbar_layout;
+      LinearLayout toolbarLayout = ViewBindings.findChildViewById(rootView, id);
+      if (toolbarLayout == null) {
         break missingId;
       }
 
@@ -83,8 +116,8 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((RelativeLayout) rootView, appBarLayout, fabNewChat,
-          viewPager);
+      return new ActivityMainBinding((RelativeLayout) rootView, fabNewChat, groupIcon, searchIcon,
+          settingsIcon, toolbarLayout, viewPager);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

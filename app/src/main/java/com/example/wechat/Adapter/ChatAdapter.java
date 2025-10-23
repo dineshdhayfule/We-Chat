@@ -1,49 +1,69 @@
 package com.example.wechat.Adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
+import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wechat.ImageViewerActivity;
 import com.example.wechat.Models.MessageModel;
+import com.example.wechat.Models.Users;
 import com.example.wechat.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ChatAdapter extends RecyclerView.Adapter {
+public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     ArrayList<Object> chatItems;
+    ArrayList<Object> chatItemsFull;
     Context context;
     String recId;
+    RecyclerView recyclerView;
 
     private boolean isMultiSelectMode = false;
     private ArrayList<MessageModel> selectedMessages = new ArrayList<>();
+    private int selectedPosition = -1;
 
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECEIVER = 2;
     private static final int VIEW_TYPE_DATE_HEADER = 3;
 
-    public ChatAdapter(ArrayList<Object> chatItems, Context context, String recId) {
+    public ChatAdapter(ArrayList<Object> chatItems, Context context, String recId, RecyclerView recyclerView) {
         this.chatItems = chatItems;
+        this.chatItemsFull = new ArrayList<>(chatItems);
         this.context = context;
         this.recId = recId;
+        this.recyclerView = recyclerView;
+    }
+
+    public MessageModel getSelectedUser(){
+        if(selectedPosition != -1 && selectedPosition < chatItems.size()){
+            if(chatItems.get(selectedPosition) instanceof MessageModel){
+                return (MessageModel) chatItems.get(selectedPosition);
+            }
+        }
+        return null;
     }
 
     public void setMultiSelectMode(boolean isMultiSelectMode) {
@@ -127,12 +147,29 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
                 if(message.getRepliedToMessage() != null){
                     senderViewHolder.replyLayout.setVisibility(View.VISIBLE);
-                    senderViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(message.getRepliedToSender()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                Users user = snapshot.getValue(Users.class);
+                                senderViewHolder.repliedToSender.setText(user.getUserName());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     if(message.getRepliedToMessage().equals("Photo")){
                         senderViewHolder.repliedToMessage.setText("Photo");
                     } else {
                         senderViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
                     }
+
+                    senderViewHolder.replyLayout.setOnClickListener(v -> scrollToMessage(message.getRepliedToMessageId()));
+
                 } else {
                     senderViewHolder.replyLayout.setVisibility(View.GONE);
                 }
@@ -141,33 +178,48 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     senderViewHolder.senderMsg.setVisibility(View.GONE);
                     senderViewHolder.image.setVisibility(View.VISIBLE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(senderViewHolder.image);
-                } else if(message.getAudioUrl() != null){
-                    senderViewHolder.senderMsg.setVisibility(View.GONE);
-                    senderViewHolder.playButton.setVisibility(View.VISIBLE);
-                    senderViewHolder.playButton.setOnClickListener(v -> {
-                        MediaPlayer mediaPlayer = new MediaPlayer();
-                        try {
-                            mediaPlayer.setDataSource(message.getAudioUrl());
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
                 } else {
                     senderViewHolder.senderMsg.setText(message.getMessage());
                 }
                 senderViewHolder.senderTime.setText(formatTime(message.getTimeStamp()));
+
+                if (message.isRead()) {
+                    senderViewHolder.readReceipt.setImageResource(R.drawable.ic_double_tick);
+                    TypedValue typedValue = new TypedValue();
+                    context.getTheme().resolveAttribute(R.attr.primaryAccentColor, typedValue, true);
+                    senderViewHolder.readReceipt.setColorFilter(typedValue.data, android.graphics.PorterDuff.Mode.SRC_IN);
+                } else {
+                    senderViewHolder.readReceipt.setImageResource(R.drawable.ic_single_tick);
+                    TypedValue typedValue = new TypedValue();
+                    context.getTheme().resolveAttribute(R.attr.textColorHighEmphasis, typedValue, true);
+                    senderViewHolder.readReceipt.setColorFilter(typedValue.data, android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+
             } else {
                 ReciverViewHolder reciverViewHolder = (ReciverViewHolder) holder;
                 if(message.getRepliedToMessage() != null){
                     reciverViewHolder.replyLayout.setVisibility(View.VISIBLE);
-                    reciverViewHolder.repliedToSender.setText(message.getRepliedToSender());
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(message.getRepliedToSender()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                Users user = snapshot.getValue(Users.class);
+                                reciverViewHolder.repliedToSender.setText(user.getUserName());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                      if(message.getRepliedToMessage().equals("Photo")){
                         reciverViewHolder.repliedToMessage.setText("Photo");
                     } else {
                         reciverViewHolder.repliedToMessage.setText(message.getRepliedToMessage());
                     }
+                    reciverViewHolder.replyLayout.setOnClickListener(v -> scrollToMessage(message.getRepliedToMessageId()));
                 } else {
                     reciverViewHolder.replyLayout.setVisibility(View.GONE);
                 }
@@ -176,24 +228,31 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     reciverViewHolder.reciverMsg.setVisibility(View.GONE);
                     reciverViewHolder.image.setVisibility(View.VISIBLE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(reciverViewHolder.image);
-                } else if(message.getAudioUrl() != null){
-                    reciverViewHolder.reciverMsg.setVisibility(View.GONE);
-                    reciverViewHolder.playButton.setVisibility(View.VISIBLE);
-                    reciverViewHolder.playButton.setOnClickListener(v -> {
-                        MediaPlayer mediaPlayer = new MediaPlayer();
-                        try {
-                            mediaPlayer.setDataSource(message.getAudioUrl());
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
                 } else {
                     reciverViewHolder.reciverMsg.setText(message.getMessage());
                 }
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
                 reciverViewHolder.senderName.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void scrollToMessage(String messageId) {
+        for (int i = 0; i < chatItems.size(); i++) {
+            Object item = chatItems.get(i);
+            if (item instanceof MessageModel) {
+                if (((MessageModel) item).getMessageId().equals(messageId)) {
+                    final int position = i;
+                    ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+                    new Handler().postDelayed(() -> {
+                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
+                        if (viewHolder != null) {
+                            viewHolder.itemView.setBackgroundColor(Color.parseColor("#803F51B5"));
+                            new Handler().postDelayed(() -> viewHolder.itemView.setBackgroundColor(Color.TRANSPARENT), 1000);
+                        }
+                    }, 300);
+                    break;
+                }
             }
         }
     }
@@ -213,6 +272,40 @@ public class ChatAdapter extends RecyclerView.Adapter {
         return chatItems.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return chatFilter;
+    }
+
+    private Filter chatFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Object> filteredList = new ArrayList<>();
+            if(constraint == null || constraint.length() == 0){
+                filteredList.addAll(chatItemsFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for(Object item : chatItemsFull){
+                    if(item instanceof MessageModel){
+                        if(((MessageModel) item).getMessage().toLowerCase().contains(filterPattern)){
+                            filteredList.add(item);
+                        }
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            chatItems.clear();
+            chatItems.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     private String formatTime(long timeInMillis) {
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
         return formatter.format(new Date(timeInMillis));
@@ -228,7 +321,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     public class ReciverViewHolder extends RecyclerView.ViewHolder {
         TextView reciverMsg, reciverTime, senderName, repliedToSender, repliedToMessage;
-        ImageView image, playButton;
+        ImageView image;
         View replyLayout;
 
         public ReciverViewHolder(@NonNull View itemView) {
@@ -240,13 +333,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
             replyLayout = itemView.findViewById(R.id.reply_layout);
             repliedToSender = itemView.findViewById(R.id.replied_to_sender);
             repliedToMessage = itemView.findViewById(R.id.replied_to_message);
-            playButton = itemView.findViewById(R.id.play_button);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
         TextView senderMsg, senderTime, repliedToSender, repliedToMessage;
-        ImageView image, playButton;
+        ImageView image, readReceipt;
         View replyLayout;
 
         public SenderViewHolder(@NonNull View itemView) {
@@ -257,7 +349,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             replyLayout = itemView.findViewById(R.id.reply_layout);
             repliedToSender = itemView.findViewById(R.id.replied_to_sender);
             repliedToMessage = itemView.findViewById(R.id.replied_to_message);
-            playButton = itemView.findViewById(R.id.play_button);
+            readReceipt = itemView.findViewById(R.id.read_receipt);
         }
     }
 }

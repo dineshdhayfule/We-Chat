@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorControlNormal">?attr/textColorHighEmphasis</item>
+    </style>
+
+    <!-- Modern & Focused Blue Theme -->
+    <style name="AppTheme.ModernBlue" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_accent_blue</item>
+        <item name="colorPrimaryVariant">@color/primary_accent_blue</item>
+        <item name="colorOnPrimary">@color/text_high_emphasis_blue</item>
+        <item name="colorSecondary">@color/secondary_blue</item>
+        <item name="colorSecondaryVariant">@color/secondary_blue</item>
+        <item name="colorOnSecondary">@color/text_high_emphasis_blue</item>
+        <item name="android:windowBackground">@color/main_background_blue</item>
+        <item name="colorSurface">@color/surface_input_field_blue</item>
+        <item name="colorError">@color/destructive_action_blue</item>
+        <item name="android:navigationBarColor">@color/main_background_blue</item>
+
+        <!-- Custom Attributes -->
+        <item name="mainBackgroundColor">@color/main_background_blue</item>
+        <item name="surfaceColor">@color/surface_input_field_blue</item>
+        <item name="primaryAccentColor">@color/primary_accent_blue</item>
+        <item name="secondaryColor">@color/secondary_blue</item>
+        <item name="textColorHighEmphasis">@color/text_high_emphasis_blue</item>
+        <item name="textColorMediumEmphasis">@color/text_medium_emphasis_blue</item>
+        <item name="destructiveActionColor">@color/destructive_action_blue</item>
+    </style>
+
+    <!-- Sleek & Vibrant Teal Theme -->
+    <style name="AppTheme.SleekTeal" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_accent_teal</item>
+        <item name="colorPrimaryVariant">@color/primary_accent_teal</item>
+        <item name="colorOnPrimary">@color/text_high_emphasis_teal</item>
+        <item name="colorSecondary">@color/secondary_teal</item>
+        <item name="colorSecondaryVariant">@color/secondary_teal</item>
+        <item name="colorOnSecondary">@color/text_high_emphasis_teal</item>
+        <item name="android:windowBackground">@color/main_background_teal</item>
+        <item name="colorSurface">@color/surface_input_field_teal</item>
+        <item name="colorError">@color/destructive_action_teal</item>
+        <item name="android:navigationBarColor">@color/main_background_teal</item>
+
+        <!-- Custom Attributes -->
+        <item name="mainBackgroundColor">@color/main_background_teal</item>
+        <item name="surfaceColor">@color/surface_input_field_teal</item>
+        <item name="primaryAccentColor">@color/primary_accent_teal</item>
+        <item name="secondaryColor">@color/secondary_teal</item>
+        <item name="textColorHighEmphasis">@color/text_high_emphasis_teal</item>
+        <item name="textColorMediumEmphasis">@color/text_medium_emphasis_teal</item>
+        <item name="destructiveActionColor">@color/destructive_action_teal</item>
+    </style>
+
+</resources>

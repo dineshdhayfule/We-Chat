@@ -1,10 +1,16 @@
 package com.example.wechat;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
 
 import com.example.wechat.Adapter.UsersAdapter;
 import com.example.wechat.Models.Users;
@@ -19,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NewChatActivity extends AppCompatActivity {
+public class NewChatActivity extends BaseActivity {
 
     ActivityNewChatBinding binding;
     ArrayList<Users> list = new ArrayList<>();
@@ -86,6 +92,64 @@ public class NewChatActivity extends AppCompatActivity {
 
             }
         });
+
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if(adapter.getSelectedUser() != null){
+                    binding.fabConfirm.setVisibility(View.VISIBLE);
+                } else {
+                    binding.fabConfirm.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        binding.fabConfirm.setOnClickListener(v -> {
+            Users selectedUser = adapter.getSelectedUser();
+            if(selectedUser != null){
+                String senderId = FirebaseAuth.getInstance().getUid();
+                String receiverId = selectedUser.getUserId();
+
+                String senderRoom = senderId + receiverId;
+                String receiverRoom = receiverId + senderId;
+
+                // By creating a placeholder, we ensure that the chat room exists,
+                // so it will appear in the main chat list.
+                database.getReference().child("chats").child(senderRoom).child("placeholder").setValue(true);
+                database.getReference().child("chats").child(receiverRoom).child("placeholder").setValue(true);
+
+                Intent intent = new Intent(NewChatActivity.this, ChatDetailActivity.class);
+                intent.putExtra("userId",selectedUser.getUserId());
+                intent.putExtra("profilePic",selectedUser.getProfilePic());
+                intent.putExtra("userName",selectedUser.getUserName());
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.new_chat_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

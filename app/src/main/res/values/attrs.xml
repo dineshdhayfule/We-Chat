@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mainBackgroundColor" format="color" />
+    <attr name="surfaceColor" format="color" />
+    <attr name="primaryAccentColor" format="color" />
+    <attr name="secondaryColor" format="color" />
+    <attr name="textColorHighEmphasis" format="color" />
+    <attr name="textColorMediumEmphasis" format="color" />
+    <attr name="destructiveActionColor" format="color" />
+</resources>
