@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Modern & Focused Blue -->
-    <color name="main_background_blue">#1D232A</color>
-    <color name="surface_input_field_blue">#374151</color>
-    <color name="primary_accent_blue">#3B82F6</color>
-    <color name="secondary_blue">#4B5563</color>
-    <color name="text_high_emphasis_blue">#F9FAFB</color>
-    <color name="text_medium_emphasis_blue">#9CA3AF</color>
-    <color name="destructive_action_blue">#EF4444</color>
-
-    <!-- Sleek & Vibrant Teal -->
-    <color name="main_background_teal">#111827</color>
-    <color name="surface_input_field_teal">#1F2937</color>
-    <color name="primary_accent_teal">#14B8A6</color>
-    <color name="secondary_teal">#374151</color>
-    <color name="text_high_emphasis_teal">#F9FAFB</color>
-    <color name="text_medium_emphasis_teal">#9CA3AF</color>
-    <color name="destructive_action_teal">#EF4444</color>
-
-
-    <!-- For compatibility with old names -->
-    <color name="main_background">@color/main_background_blue</color>
-    <color name="surface_input_field">@color/surface_input_field_blue</color>
-    <color name="primary_accent">@color/primary_accent_blue</color>
-    <color name="secondary">@color/secondary_blue</color>
-    <color name="text_high_emphasis">@color/text_high_emphasis_blue</color>
-    <color name="text_medium_emphasis">@color/text_medium_emphasis_blue</color>
-    <color name="destructive_action">@color/destructive_action_blue</color>
-
-    <color name="dark_blue_background">@color/main_background_blue</color>
-    <color name="bright_blue_button">@color/primary_accent_blue</color>
-    <color name="subtle_text_grey">@color/text_medium_emphasis_blue</color>
-    <color name="dark_grey">@color/main_background_blue</color>
+    <!-- Common Colors -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="red">@color/destructive_action_blue</color>
 
+    <!-- Modern & Focused Blue Theme -->
+    <color name="primary_background_blue">#F0F2F5</color>
+    <color name="surface_input_field_blue">#FFFFFF</color>
+    <color name="primary_accent_blue">#0057FF</color>
+    <color name="text_high_emphasis_blue">#000000</color>
+    <color name="text_medium_emphasis_blue">#8A000000</color>
+    <color name="destructive_action_blue">#D32F2F</color>
+
+    <!-- Sleek & Vibrant Teal Theme -->
+    <color name="primary_background_teal">#121212</color>
+    <color name="surface_input_field_teal">#212121</color>
+    <color name="primary_accent_teal">#03DAC5</color>
+    <color name="text_high_emphasis_teal">#FFFFFF</color>
+    <color name="text_medium_emphasis_teal">#B3FFFFFF</color>
+    <color name="destructive_action_teal">#CF6679</color>
 </resources>

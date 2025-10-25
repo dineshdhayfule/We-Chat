@@ -36,6 +36,9 @@ public final class ActivityChatDetailBinding implements ViewBinding {
   public final ImageView backArrow;
 
   @NonNull
+  public final TextView blockedUserIndicator;
+
+  @NonNull
   public final ImageView camera;
 
   @NonNull
@@ -85,7 +88,8 @@ public final class ActivityChatDetailBinding implements ViewBinding {
 
   private ActivityChatDetailBinding(@NonNull RelativeLayout rootView,
       @NonNull RelativeLayout RelativeLayout, @NonNull ImageView attachment,
-      @NonNull ImageView backArrow, @NonNull ImageView camera, @NonNull ImageView cancelReply,
+      @NonNull ImageView backArrow, @NonNull TextView blockedUserIndicator,
+      @NonNull ImageView camera, @NonNull ImageView cancelReply,
       @NonNull RecyclerView chatRecyclerView, @NonNull ImageView delete,
       @NonNull EditText enterMessage, @NonNull TextView lastSeen, @NonNull LinearLayout linear,
       @NonNull ImageView menu, @NonNull CircleImageView profileImage,
@@ -96,6 +100,7 @@ public final class ActivityChatDetailBinding implements ViewBinding {
     this.RelativeLayout = RelativeLayout;
     this.attachment = attachment;
     this.backArrow = backArrow;
+    this.blockedUserIndicator = blockedUserIndicator;
     this.camera = camera;
     this.cancelReply = cancelReply;
     this.chatRecyclerView = chatRecyclerView;
@@ -152,6 +157,12 @@ public final class ActivityChatDetailBinding implements ViewBinding {
       id = R.id.backArrow;
       ImageView backArrow = ViewBindings.findChildViewById(rootView, id);
       if (backArrow == null) {
+        break missingId;
+      }
+
+      id = R.id.blocked_user_indicator;
+      TextView blockedUserIndicator = ViewBindings.findChildViewById(rootView, id);
+      if (blockedUserIndicator == null) {
         break missingId;
       }
 
@@ -252,9 +263,9 @@ public final class ActivityChatDetailBinding implements ViewBinding {
       }
 
       return new ActivityChatDetailBinding((RelativeLayout) rootView, RelativeLayout, attachment,
-          backArrow, camera, cancelReply, chatRecyclerView, delete, enterMessage, lastSeen, linear,
-          menu, profileImage, repliedToMessage, repliedToSender, replyLayout, send, toolbar,
-          typingIndicator, userName);
+          backArrow, blockedUserIndicator, camera, cancelReply, chatRecyclerView, delete,
+          enterMessage, lastSeen, linear, menu, profileImage, repliedToMessage, repliedToSender,
+          replyLayout, send, toolbar, typingIndicator, userName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

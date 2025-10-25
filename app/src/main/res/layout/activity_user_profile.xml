@@ -7,20 +7,18 @@
     android:background="?attr/mainBackgroundColor"
     tools:context=".UserProfileActivity">
 
-    <ImageView
-        android:id="@+id/backArrow"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/arrow_back_24"
-        app:tint="?attr/textColorHighEmphasis" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/surfaceColor"
+        app:title="" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_below="@+id/backArrow"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/avatar3"
@@ -84,6 +82,7 @@
         android:layout_margin="16dp"
         android:backgroundTint="?attr/destructiveActionColor"
         android:text="Block User"
+        android:visibility="gone"
         android:textColor="?attr/textColorHighEmphasis" />
 
 </RelativeLayout>

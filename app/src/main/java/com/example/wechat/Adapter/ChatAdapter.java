@@ -197,6 +197,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             } else {
                 ReciverViewHolder reciverViewHolder = (ReciverViewHolder) holder;
+                reciverViewHolder.senderName.setVisibility(View.GONE);
+
                 if(message.getRepliedToMessage() != null){
                     reciverViewHolder.replyLayout.setVisibility(View.VISIBLE);
                     FirebaseDatabase.getInstance().getReference().child("Users").child(message.getRepliedToSender()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -232,7 +234,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     reciverViewHolder.reciverMsg.setText(message.getMessage());
                 }
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
-                reciverViewHolder.senderName.setVisibility(View.GONE);
             }
         }
     }

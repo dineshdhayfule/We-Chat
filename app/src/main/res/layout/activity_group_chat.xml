@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/mainBackgroundColor"
+        android:background="?attr/surfaceColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
@@ -39,19 +39,19 @@
                 app:civ_border_color="?attr/primaryAccentColor"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backArrow"
+                app:layout_constraintStart_toEndOf="@id/backArrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android.layout_marginStart="8dp"
                 android:text="Group Name"
                 android:textColor="?attr/textColorHighEmphasis"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toEndOf="@id/profile_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?attr/mainBackgroundColor"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
@@ -158,7 +158,7 @@
             android:id="@+id/replied_to_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/replied_to_sender"
+            android:layout_below="@id/replied_to_sender"
             android:layout_marginStart="8dp"
             android:text="This is the message that was replied to."
             android:textColor="?attr/textColorHighEmphasis" />

@@ -3,8 +3,9 @@
     <attr name="mainBackgroundColor" format="color" />
     <attr name="surfaceColor" format="color" />
     <attr name="primaryAccentColor" format="color" />
-    <attr name="secondaryColor" format="color" />
     <attr name="textColorHighEmphasis" format="color" />
     <attr name="textColorMediumEmphasis" format="color" />
     <attr name="destructiveActionColor" format="color" />
+    <attr name="chatBubbleStrokeColor" format="color" />
+    <attr name="popupMenuTheme" format="reference" />
 </resources>

@@ -1,14 +1,13 @@
 package com.example.wechat.Fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.wechat.Adapter.UsersAdapter;
 import com.example.wechat.Models.Users;
@@ -23,12 +22,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class ChatsFragment extends Fragment {
 
-
     FragmentChatsBinding binding;
-    ArrayList <Users> list = new ArrayList<>();
+    ArrayList<Users> list = new ArrayList<>();
     FirebaseDatabase database;
     UsersAdapter adapter;
 
@@ -36,14 +33,10 @@ public class ChatsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        binding=FragmentChatsBinding.inflate(inflater,container,false);
+        binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
         adapter = new UsersAdapter(list, getContext(), false);
 
@@ -51,36 +44,35 @@ public class ChatsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.chatRecyclerView.setLayoutManager(layoutManager);
 
-        // Forcefully remove any and all item decorations
-        if (binding.chatRecyclerView.getItemDecorationCount() > 0) {
-            binding.chatRecyclerView.removeItemDecorationAt(0);
-        }
+        loadConversations();
+
+        return binding.getRoot();
+    }
+
+    private void loadConversations() {
+        String currentUserId = FirebaseAuth.getInstance().getUid();
+        if (currentUserId == null) return;
 
         database.getReference().child("chats").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                final Set<String> userIds = new HashSet<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.getKey() != null && dataSnapshot.getKey().contains(FirebaseAuth.getInstance().getUid())) {
-                        userIds.add(dataSnapshot.getKey().replace(FirebaseAuth.getInstance().getUid(), ""));
+            public void onDataChange(@NonNull DataSnapshot chatsSnapshot) {
+                final Set<String> chatPartnerIds = new HashSet<>();
+                for (DataSnapshot snapshot : chatsSnapshot.getChildren()) {
+                    if (snapshot.getKey() != null && snapshot.getKey().contains(currentUserId)) {
+                        chatPartnerIds.add(snapshot.getKey().replace(currentUserId, ""));
                     }
-                }
-
-                if (userIds.isEmpty()) {
-                    list.clear();
-                    adapter.notifyDataSetChanged();
-                    return;
                 }
 
                 database.getReference().child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot usersSnapshot) {
                         list.clear();
-                        for (DataSnapshot dataSnapshot : usersSnapshot.getChildren()) {
-                            if (userIds.contains(dataSnapshot.getKey())) {
-                                Users user = dataSnapshot.getValue(Users.class);
+                        for (DataSnapshot snapshot : usersSnapshot.getChildren()) {
+                            String userId = snapshot.getKey();
+                            if (userId != null && chatPartnerIds.contains(userId)) {
+                                Users user = snapshot.getValue(Users.class);
                                 if (user != null) {
-                                    user.setUserId(dataSnapshot.getKey());
+                                    user.setUserId(userId);
                                     list.add(user);
                                 }
                             }
@@ -89,17 +81,13 @@ public class ChatsFragment extends Fragment {
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
-
-        return binding.getRoot();
     }
 
     public UsersAdapter getAdapter() {

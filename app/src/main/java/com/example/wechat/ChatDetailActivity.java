@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -40,7 +41,6 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,8 +67,6 @@ public class ChatDetailActivity extends BaseActivity {
         binding = ActivityChatDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setWallpaper();
-
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -85,26 +83,20 @@ public class ChatDetailActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        binding.backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (chatAdapter.isMultiSelectMode()) {
-                    chatAdapter.setMultiSelectMode(false);
-                    binding.delete.setVisibility(View.GONE);
-                } else {
-                    Intent intent = new Intent(ChatDetailActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
+        binding.backArrow.setOnClickListener(view -> {
+            if (chatAdapter.isMultiSelectMode()) {
+                chatAdapter.setMultiSelectMode(false);
+                binding.delete.setVisibility(View.GONE);
+            } else {
+                Intent intent = new Intent(ChatDetailActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
-        binding.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatDetailActivity.this, UserProfileActivity.class);
-                intent.putExtra("userId", recieveId);
-                startActivity(intent);
-            }
+        binding.profileImage.setOnClickListener(view -> {
+            Intent intent = new Intent(ChatDetailActivity.this, UserProfileActivity.class);
+            intent.putExtra("userId", recieveId);
+            startActivity(intent);
         });
 
         final ArrayList<Object> chatItems = new ArrayList<>();
@@ -114,6 +106,9 @@ public class ChatDetailActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
+
+        final String senderRoom = senderId + recieveId;
+        final String receiverRoom = recieveId + senderId;
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -136,14 +131,11 @@ public class ChatDetailActivity extends BaseActivity {
                 }
             }
         }).attachToRecyclerView(binding.chatRecyclerView);
-        
+
         binding.cancelReply.setOnClickListener(v -> {
             repliedToMessage = null;
             binding.replyLayout.setVisibility(View.GONE);
         });
-
-        final String senderRoom = senderId + recieveId;
-        final String receiverRoom = recieveId + senderId;
 
         database.getReference().child("Users").child(recieveId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -241,52 +233,42 @@ public class ChatDetailActivity extends BaseActivity {
                     }
                 });
 
-        binding.attachment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+        binding.attachment.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_REQUEST_CODE);
+        });
+
+        binding.camera.setOnClickListener(v -> {
+            if(ContextCompat.checkSelfPermission(ChatDetailActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(ChatDetailActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+            } else {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         });
 
-        binding.camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(ChatDetailActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(ChatDetailActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                } else {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        binding.menu.setOnClickListener(view -> {
+            Context wrapper = new ContextThemeWrapper(ChatDetailActivity.this, R.style.App_PopupMenu_Dark);
+            PopupMenu popup = new PopupMenu(wrapper, view);
+            popup.getMenuInflater().inflate(R.menu.personal_chat_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_clear_chat) {
+                    database.getReference().child("chats").child(senderRoom).removeValue();
+                    return true;
+                } else if (itemId == R.id.action_delete) {
+                    chatAdapter.setMultiSelectMode(true);
+                    binding.delete.setVisibility(View.VISIBLE);
+                    return true;
+                } else if (itemId == R.id.action_settings) {
+                    startActivity(new Intent(ChatDetailActivity.this, SettingsActivity.class));
+                    return true;
                 }
-            }
-        });
-
-        binding.menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(ChatDetailActivity.this, view);
-                popup.getMenuInflater().inflate(R.menu.personal_chat_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int itemId = item.getItemId();
-                        if (itemId == R.id.action_clear_chat) {
-                            database.getReference().child("chats").child(senderRoom).removeValue();
-                            return true;
-                        } else if (itemId == R.id.action_delete) {
-                            chatAdapter.setMultiSelectMode(true);
-                            binding.delete.setVisibility(View.VISIBLE);
-                            return true;
-                        } else if (itemId == R.id.action_settings) {
-                            startActivity(new Intent(ChatDetailActivity.this, SettingsActivity.class));
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
-            }
+                return false;
+            });
+            popup.show();
         });
 
         binding.delete.setOnClickListener(v -> {
@@ -298,36 +280,28 @@ public class ChatDetailActivity extends BaseActivity {
             binding.delete.setVisibility(View.GONE);
         });
 
-        binding.send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = binding.enterMessage.getText().toString();
-                if (message.isEmpty()) {
-                    Toast.makeText(ChatDetailActivity.this, "Enter a message", Toast.LENGTH_SHORT).show();
-                } else {
-                    final MessageModel model = new MessageModel(senderId, message);
-                    model.setTimeStamp(new Date().getTime());
-                    if(repliedToMessage != null){
-                        model.setRepliedToMessage(repliedToMessage.getMessage());
-                        model.setRepliedToSender(repliedToMessage.getuId());
-                        model.setRepliedToMessageId(repliedToMessage.getMessageId());
-                        binding.replyLayout.setVisibility(View.GONE);
-                        repliedToMessage = null;
-                    }
-                    binding.enterMessage.setText("");
-                    database.getReference().child("chats")
-                            .child(senderRoom)
-                            .push()
-                            .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    database.getReference().child("chats")
-                                            .child(receiverRoom)
-                                            .push()
-                                            .setValue(model);
-                                }
-                            });
+        binding.send.setOnClickListener(view -> {
+            String message = binding.enterMessage.getText().toString();
+            if (message.isEmpty()) {
+                Toast.makeText(ChatDetailActivity.this, "Enter a message", Toast.LENGTH_SHORT).show();
+            } else {
+                final MessageModel model = new MessageModel(senderId, message);
+                model.setTimeStamp(new Date().getTime());
+                if(repliedToMessage != null){
+                    model.setRepliedToMessage(repliedToMessage.getMessage());
+                    model.setRepliedToSender(repliedToMessage.getuId());
+                    model.setRepliedToMessageId(repliedToMessage.getMessageId());
+                    binding.replyLayout.setVisibility(View.GONE);
+                    repliedToMessage = null;
                 }
+                binding.enterMessage.setText("");
+                database.getReference().child("chats")
+                        .child(senderRoom)
+                        .push()
+                        .setValue(model).addOnSuccessListener(unused -> database.getReference().child("chats")
+                                .child(receiverRoom)
+                                .push()
+                                .setValue(model));
             }
         });
     }
@@ -340,30 +314,17 @@ public class ChatDetailActivity extends BaseActivity {
                 if(data.getData() != null){
                     Uri selectedImage = data.getData();
                     final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
-                    reference.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String imageUrl = uri.toString();
-                                    final MessageModel model = new MessageModel(auth.getUid(), "Photo");
-                                    model.setTimeStamp(new Date().getTime());
-                                    model.setImageUrl(imageUrl);
+                    reference.putFile(selectedImage).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        final MessageModel model = new MessageModel(auth.getUid(), "Photo");
+                        model.setTimeStamp(new Date().getTime());
+                        model.setImageUrl(imageUrl);
 
-                                    final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
-                                    final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
+                        final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
+                        final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
 
-                                    database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            database.getReference().child("chats").child(receiverRoom).push().setValue(model);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                        database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(aVoid -> database.getReference().child("chats").child(receiverRoom).push().setValue(model));
+                    }));
                 }
             } else if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -371,30 +332,17 @@ public class ChatDetailActivity extends BaseActivity {
                 photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                 byte[] bb = bytes.toByteArray();
                 final StorageReference reference = storage.getReference().child("chats").child(new Date().getTime() + "");
-                reference.putBytes(bb).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String imageUrl = uri.toString();
-                                final MessageModel model = new MessageModel(auth.getUid(), "Photo");
-                                model.setTimeStamp(new Date().getTime());
-                                model.setImageUrl(imageUrl);
+                reference.putBytes(bb).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String imageUrl = uri.toString();
+                    final MessageModel model = new MessageModel(auth.getUid(), "Photo");
+                    model.setTimeStamp(new Date().getTime());
+                    model.setImageUrl(imageUrl);
 
-                                final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
-                                final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
+                    final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
+                    final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
 
-                                database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        database.getReference().child("chats").child(receiverRoom).push().setValue(model);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                    database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(aVoid -> database.getReference().child("chats").child(receiverRoom).push().setValue(model));
+                }));
             }
         }
     }
@@ -422,22 +370,6 @@ public class ChatDetailActivity extends BaseActivity {
         }
     }
 
-    private void setWallpaper(){
-        SharedPreferences sharedPreferences = getSharedPreferences("wallpaper", MODE_PRIVATE);
-        int wallpaperId = sharedPreferences.getInt("wallpaperId", 0);
-        String wallpaperUri = sharedPreferences.getString("wallpaperUri", null);
-
-        if(wallpaperId != 0){
-            binding.RelativeLayout.setBackgroundResource(wallpaperId);
-        } else if (wallpaperUri != null){
-            try {
-                binding.RelativeLayout.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(wallpaperUri))));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private boolean isSameDay(long timestamp1, long timestamp2) {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTimeInMillis(timestamp1);
@@ -450,7 +382,7 @@ public class ChatDetailActivity extends BaseActivity {
     private String getFormattedDate(long timestamp) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp);
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
         return formatter.format(cal.getTime());
     }
 
@@ -464,7 +396,7 @@ public class ChatDetailActivity extends BaseActivity {
         } else if (now.get(Calendar.YEAR) == time.get(Calendar.YEAR) && now.get(Calendar.DAY_OF_YEAR) - 1 == time.get(Calendar.DAY_OF_YEAR)) {
             return "yesterday at " + new SimpleDateFormat("h:mm a", Locale.getDefault()).format(time.getTime());
         } else {
-            return new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a", Locale.getDefault()).format(time.getTime());
+            return new SimpleDateFormat("MMM d, yyyy 'at' h:mm a", Locale.getDefault()).format(time.getTime());
         }
     }
 }

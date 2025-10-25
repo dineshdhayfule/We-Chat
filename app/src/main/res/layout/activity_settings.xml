@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:padding="5dp"
-                android.text="User Name:"
+                android:text="User Name:"
                 android:textColor="?attr/textColorMediumEmphasis"
                 android:textSize="14sp" />
 
@@ -151,13 +151,14 @@
         android:text="Change Wallpaper"
         android:textColor="?attr/textColorHighEmphasis"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/blocked_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/change_wallpaper"
+        android:layout_below="@id/change_wallpaper"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
@@ -167,13 +168,14 @@
         android:text="Blocked Users"
         android:textColor="?attr/textColorHighEmphasis"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/log_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/blocked_users"
+        android:layout_below="@id/blocked_users"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"

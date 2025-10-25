@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/mainBackgroundColor"
+        android:background="?attr/surfaceColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
@@ -39,7 +39,7 @@
                 app:civ_border_color="?attr/primaryAccentColor"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backArrow"
+                app:layout_constraintStart_toEndOf="@id/backArrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -51,7 +51,7 @@
                 android:textColor="?attr/textColorHighEmphasis"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toEndOf="@id/profile_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -62,8 +62,8 @@
                 android:text="Last seen..."
                 android:textColor="?attr/textColorMediumEmphasis"
                 android:textSize="13sp"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/userName" />
+                app:layout_constraintStart_toEndOf="@id/profile_image"
+                app:layout_constraintTop_toBottomOf="@id/userName" />
 
             <ImageView
                 android:id="@+id/menu"
@@ -95,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?attr/mainBackgroundColor"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
@@ -145,6 +145,18 @@
             app:srcCompat="@drawable/ic_send"
             app:tint="?attr/textColorHighEmphasis" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/blocked_user_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/surfaceColor"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="You have blocked this user. Unblock them to send a message."
+        android:textColor="?attr/textColorMediumEmphasis"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/reply_layout"

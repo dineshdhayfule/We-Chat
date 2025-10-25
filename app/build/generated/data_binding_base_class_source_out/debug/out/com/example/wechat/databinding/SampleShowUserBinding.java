@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.wechat.R;
@@ -19,7 +19,7 @@ import java.lang.String;
 
 public final class SampleShowUserBinding implements ViewBinding {
   @NonNull
-  private final RelativeLayout rootView;
+  private final ConstraintLayout rootView;
 
   @NonNull
   public final CheckBox checkbox;
@@ -36,7 +36,7 @@ public final class SampleShowUserBinding implements ViewBinding {
   @NonNull
   public final TextView userNameList;
 
-  private SampleShowUserBinding(@NonNull RelativeLayout rootView, @NonNull CheckBox checkbox,
+  private SampleShowUserBinding(@NonNull ConstraintLayout rootView, @NonNull CheckBox checkbox,
       @NonNull TextView lastMessage, @NonNull CircleImageView profileImage,
       @NonNull TextView timestamp, @NonNull TextView userNameList) {
     this.rootView = rootView;
@@ -49,7 +49,7 @@ public final class SampleShowUserBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public RelativeLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -104,7 +104,7 @@ public final class SampleShowUserBinding implements ViewBinding {
         break missingId;
       }
 
-      return new SampleShowUserBinding((RelativeLayout) rootView, checkbox, lastMessage,
+      return new SampleShowUserBinding((ConstraintLayout) rootView, checkbox, lastMessage,
           profileImage, timestamp, userNameList);
     }
     String missingId = rootView.getResources().getResourceName(id);

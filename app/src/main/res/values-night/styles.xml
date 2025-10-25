@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base Application Theme (Dark) -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Common Attributes -->
+        <item name="colorControlNormal">?attr/textColorHighEmphasis</item>
+        <item name="android:textViewStyle">@style/App.TextView</item>
+        <item name="android:navigationBarColor">?attr/mainBackgroundColor</item>
+
+        <!-- Custom Color Attributes (Dark) -->
+        <item name="mainBackgroundColor">@color/primary_background_teal</item>
+        <item name="surfaceColor">@color/surface_input_field_teal</item>
+        <item name="primaryAccentColor">@color/primary_accent_teal</item>
+        <item name="textColorHighEmphasis">@color/text_high_emphasis_teal</item>
+        <item name="textColorMediumEmphasis">@color/text_medium_emphasis_teal</item>
+        <item name="destructiveActionColor">@color/destructive_action_teal</item>
+        <item name="chatBubbleStrokeColor">@color/text_high_emphasis_teal</item> <!-- White for Dark Theme -->
+    </style>
+
+</resources>

@@ -21,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sender Name"
-            android:textColor="?attr/textColorHighEmphasis"
-            android:textSize="15sp"
+            android:textColor="?attr/primaryAccentColor"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,13 +31,12 @@
             android:id="@+id/reply_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:background="@drawable/reply_background"
             android:orientation="vertical"
             android:padding="8dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/senderName">
+            app:layout_constraintTop_toBottomOf="@id/senderName">
 
             <TextView
                 android:id="@+id/replied_to_sender"
@@ -64,7 +63,7 @@
             android:scaleType="centerCrop"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reply_layout" />
+            app:layout_constraintTop_toBottomOf="@id/reply_layout" />
 
         <ImageView
             android:id="@+id/play_button"
@@ -73,18 +72,19 @@
             android:src="@drawable/ic_play_arrow"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image"/>
+            app:layout_constraintTop_toBottomOf="@id/image" />
 
         <TextView
             android:id="@+id/reciverText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:maxWidth="280dp"
             android:text="Hello, User"
             android:textColor="?attr/textColorHighEmphasis"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/play_button"
+            app:layout_constraintTop_toBottomOf="@id/play_button"
             app:layout_constraintWidth_max="250dp" />
 
         <androidx.constraintlayout.widget.Barrier
