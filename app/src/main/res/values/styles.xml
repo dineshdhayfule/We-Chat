@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base Application Theme -->
+    <!-- Base Application Theme (Light) -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Common Attributes -->
         <item name="android:textViewStyle">@style/App.TextView</item>
-    </style>
+        <item name="popupMenuTheme">@style/App.PopupMenu</item>
 
-    <!-- Standard TextView -->
-    <style name="App.TextView" parent="android:Widget.TextView">
-        <item name="android:textColor">?attr/textColorHighEmphasis</item>
-    </style>
-
-    <!-- Popup Menu Themes -->
-    <style name="App.PopupMenu" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="App.PopupMenu.Dark" parent="ThemeOverlay.AppCompat.Dark" />
-
-    <!-- Modern & Focused Blue Theme (Light) -->
-    <style name="AppTheme.ModernBlue" parent="AppTheme">
+        <!-- Custom Attributes -->
         <item name="mainBackgroundColor">@color/primary_background_blue</item>
         <item name="surfaceColor">@color/surface_input_field_blue</item>
         <item name="primaryAccentColor">@color/primary_accent_blue</item>
@@ -29,8 +20,21 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
+    <!-- Standard TextView -->
+    <style name="App.TextView" parent="android:Widget.TextView">
+        <item name="android:textColor">?attr/textColorHighEmphasis</item>
+    </style>
+
+    <!-- Light Popup Menu Style -->
+    <style name="App.PopupMenu" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Dark Popup Menu Style -->
+    <style name="App.PopupMenu.Dark" parent="ThemeOverlay.AppCompat.Dark" />
+
     <!-- Sleek & Vibrant Teal Theme (Dark) -->
     <style name="AppTheme.SleekTeal" parent="Theme.AppCompat.NoActionBar">
+        <!-- Define all attributes for the dark theme -->
+        <item name="popupMenuTheme">@style/App.PopupMenu.Dark</item>
         <item name="android:textViewStyle">@style/App.TextView</item>
 
         <item name="mainBackgroundColor">@color/primary_background_teal</item>

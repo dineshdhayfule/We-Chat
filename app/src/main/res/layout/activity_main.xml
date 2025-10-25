@@ -18,6 +18,7 @@
         android:paddingEnd="16dp">
 
         <TextView
+            android:id="@+id/app_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -26,24 +27,25 @@
             android:textSize="22sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/search_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_search" />
+<!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/search_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:iconifiedByDefault="true"-->
+<!--            app:queryHint="Search..." />-->
 
         <ImageView
             android:id="@+id/group_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:src="@drawable/ic_group" />
 
         <ImageView
             android:id="@+id/settings_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ic_settings" />
 
     </LinearLayout>

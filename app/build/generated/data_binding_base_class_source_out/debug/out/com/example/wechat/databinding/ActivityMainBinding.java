@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
@@ -23,13 +24,13 @@ public final class ActivityMainBinding implements ViewBinding {
   private final RelativeLayout rootView;
 
   @NonNull
+  public final TextView appTitle;
+
+  @NonNull
   public final FloatingActionButton fabNewChat;
 
   @NonNull
   public final ImageView groupIcon;
-
-  @NonNull
-  public final ImageView searchIcon;
 
   @NonNull
   public final ImageView settingsIcon;
@@ -40,14 +41,14 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final ViewPager viewPager;
 
-  private ActivityMainBinding(@NonNull RelativeLayout rootView,
+  private ActivityMainBinding(@NonNull RelativeLayout rootView, @NonNull TextView appTitle,
       @NonNull FloatingActionButton fabNewChat, @NonNull ImageView groupIcon,
-      @NonNull ImageView searchIcon, @NonNull ImageView settingsIcon,
-      @NonNull LinearLayout toolbarLayout, @NonNull ViewPager viewPager) {
+      @NonNull ImageView settingsIcon, @NonNull LinearLayout toolbarLayout,
+      @NonNull ViewPager viewPager) {
     this.rootView = rootView;
+    this.appTitle = appTitle;
     this.fabNewChat = fabNewChat;
     this.groupIcon = groupIcon;
-    this.searchIcon = searchIcon;
     this.settingsIcon = settingsIcon;
     this.toolbarLayout = toolbarLayout;
     this.viewPager = viewPager;
@@ -80,6 +81,12 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.app_title;
+      TextView appTitle = ViewBindings.findChildViewById(rootView, id);
+      if (appTitle == null) {
+        break missingId;
+      }
+
       id = R.id.fabNewChat;
       FloatingActionButton fabNewChat = ViewBindings.findChildViewById(rootView, id);
       if (fabNewChat == null) {
@@ -89,12 +96,6 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.group_icon;
       ImageView groupIcon = ViewBindings.findChildViewById(rootView, id);
       if (groupIcon == null) {
-        break missingId;
-      }
-
-      id = R.id.search_icon;
-      ImageView searchIcon = ViewBindings.findChildViewById(rootView, id);
-      if (searchIcon == null) {
         break missingId;
       }
 
@@ -116,7 +117,7 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((RelativeLayout) rootView, fabNewChat, groupIcon, searchIcon,
+      return new ActivityMainBinding((RelativeLayout) rootView, appTitle, fabNewChat, groupIcon,
           settingsIcon, toolbarLayout, viewPager);
     }
     String missingId = rootView.getResources().getResourceName(id);

@@ -60,12 +60,12 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        binding.searchIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Search not implemented", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        binding.searchIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this, "Search not implemented", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         binding.groupIcon.setOnClickListener(new View.OnClickListener() {
             @Override
