@@ -8,6 +8,7 @@
     <color name="primary_background_blue">#F0F2F5</color>
     <color name="surface_input_field_blue">#FFFFFF</color>
     <color name="primary_accent_blue">#0057FF</color>
+    <color name="primary_accent_blue_light">#330057FF</color> <!-- 20% alpha -->
     <color name="text_high_emphasis_blue">#000000</color>
     <color name="text_medium_emphasis_blue">#8A000000</color>
     <color name="destructive_action_blue">#D32F2F</color>

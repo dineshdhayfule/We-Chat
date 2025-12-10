@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/mainBackgroundColor"
+    android:background="@color/black"
     tools:context=".NewChatActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,17 +20,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:backgroundTint="?attr/primaryAccentColor"
-        android:src="@drawable/ic_done"
-        android:visibility="gone"
-        app:tint="?attr/textColorHighEmphasis" />
 
 </RelativeLayout>
