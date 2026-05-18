@@ -3,6 +3,7 @@ package com.example.wechat.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -129,6 +130,10 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         Intent intent = new Intent(context, ImageViewerActivity.class);
                         intent.putExtra("imageUrl", message.getImageUrl());
                         context.startActivity(intent);
+                    } else if (message.getFileUrl() != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(message.getFileUrl()));
+                        context.startActivity(intent);
                     }
                 }
             });
@@ -167,8 +172,18 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if(message.getImageUrl() != null){
                     senderViewHolder.senderMsg.setVisibility(View.GONE);
                     senderViewHolder.image.setVisibility(View.VISIBLE);
+                    senderViewHolder.fileLayout.setVisibility(View.GONE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(senderViewHolder.image);
+                } else if (message.getFileUrl() != null) {
+                    senderViewHolder.senderMsg.setVisibility(View.GONE);
+                    senderViewHolder.image.setVisibility(View.GONE);
+                    senderViewHolder.fileLayout.setVisibility(View.VISIBLE);
+                    senderViewHolder.fileName.setText(message.getFileName());
+                    senderViewHolder.fileType.setText(message.getFileType());
                 } else {
+                    senderViewHolder.senderMsg.setVisibility(View.VISIBLE);
+                    senderViewHolder.image.setVisibility(View.GONE);
+                    senderViewHolder.fileLayout.setVisibility(View.GONE);
                     senderViewHolder.senderMsg.setText(message.getMessage());
                 }
                 senderViewHolder.senderTime.setText(formatTime(message.getTimeStamp()));
@@ -234,8 +249,18 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if(message.getImageUrl() != null){
                     reciverViewHolder.reciverMsg.setVisibility(View.GONE);
                     reciverViewHolder.image.setVisibility(View.VISIBLE);
+                    reciverViewHolder.fileLayout.setVisibility(View.GONE);
                     Picasso.get().load(message.getImageUrl()).placeholder(R.drawable.placeholder).into(reciverViewHolder.image);
+                } else if (message.getFileUrl() != null) {
+                    reciverViewHolder.reciverMsg.setVisibility(View.GONE);
+                    reciverViewHolder.image.setVisibility(View.GONE);
+                    reciverViewHolder.fileLayout.setVisibility(View.VISIBLE);
+                    reciverViewHolder.fileName.setText(message.getFileName());
+                    reciverViewHolder.fileType.setText(message.getFileType());
                 } else {
+                    reciverViewHolder.reciverMsg.setVisibility(View.VISIBLE);
+                    reciverViewHolder.image.setVisibility(View.GONE);
+                    reciverViewHolder.fileLayout.setVisibility(View.GONE);
                     reciverViewHolder.reciverMsg.setText(message.getMessage());
                 }
                 reciverViewHolder.reciverTime.setText(formatTime(message.getTimeStamp()));
@@ -292,9 +317,9 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class ReciverViewHolder extends RecyclerView.ViewHolder {
-        TextView reciverMsg, reciverTime, senderName, repliedToSender, repliedToMessage;
+        TextView reciverMsg, reciverTime, senderName, repliedToSender, repliedToMessage, fileName, fileType;
         ImageView image;
-        View replyLayout;
+        View replyLayout, fileLayout;
 
         public ReciverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -305,13 +330,16 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             replyLayout = itemView.findViewById(R.id.reply_layout);
             repliedToSender = itemView.findViewById(R.id.replied_to_sender);
             repliedToMessage = itemView.findViewById(R.id.replied_to_message);
+            fileLayout = itemView.findViewById(R.id.file_layout);
+            fileName = itemView.findViewById(R.id.file_name);
+            fileType = itemView.findViewById(R.id.file_type);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
-        TextView senderMsg, senderTime, repliedToSender, repliedToMessage;
+        TextView senderMsg, senderTime, repliedToSender, repliedToMessage, fileName, fileType;
         ImageView image, readReceipt;
-        View replyLayout;
+        View replyLayout, fileLayout;
 
         public SenderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -322,6 +350,9 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             repliedToSender = itemView.findViewById(R.id.replied_to_sender);
             repliedToMessage = itemView.findViewById(R.id.replied_to_message);
             readReceipt = itemView.findViewById(R.id.read_receipt);
+            fileLayout = itemView.findViewById(R.id.file_layout);
+            fileName = itemView.findViewById(R.id.file_name);
+            fileType = itemView.findViewById(R.id.file_type);
         }
     }
 }

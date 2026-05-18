@@ -13,11 +13,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
@@ -60,6 +63,7 @@ public class ChatDetailActivity extends BaseActivity {
 
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 25;
+    private static final int DOCUMENT_REQUEST_CODE = 26;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,10 +238,24 @@ public class ChatDetailActivity extends BaseActivity {
                 });
 
         binding.attachment.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            PopupMenu popupMenu = new PopupMenu(ChatDetailActivity.this, v);
+            popupMenu.getMenu().add("Image");
+            popupMenu.getMenu().add("Document");
+            popupMenu.setOnMenuItemClickListener(item -> {
+                if (item.getTitle().equals("Image")) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, GALLERY_REQUEST_CODE);
+                } else if (item.getTitle().equals("Document")) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
+                }
+                return true;
+            });
+            popupMenu.show();
         });
 
         binding.camera.setOnClickListener(v -> {
@@ -326,6 +344,42 @@ public class ChatDetailActivity extends BaseActivity {
                         database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(aVoid -> database.getReference().child("chats").child(receiverRoom).push().setValue(model));
                     }));
                 }
+            } else if (requestCode == DOCUMENT_REQUEST_CODE) {
+                if (data.getData() != null) {
+                    Uri fileUri = data.getData();
+                    String fileName = getFileNameFromUri(fileUri);
+                    
+                    ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setTitle("Uploading File");
+                    progressDialog.setMessage("Please wait while we upload your file...");
+                    progressDialog.show();
+
+                    final StorageReference reference = storage.getReference().child("documents").child(new Date().getTime() + "_" + fileName);
+                    reference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        progressDialog.dismiss();
+                        String fileUrl = uri.toString();
+                        final MessageModel model = new MessageModel(auth.getUid(), "Document: " + fileName);
+                        model.setTimeStamp(new Date().getTime());
+                        model.setFileUrl(fileUrl);
+                        model.setFileName(fileName);
+                        
+                        String extension = "";
+                        int i = fileName.lastIndexOf('.');
+                        if (i > 0) extension = fileName.substring(i+1).toUpperCase();
+                        model.setFileType(extension);
+
+                        final String senderRoom = auth.getUid() + getIntent().getStringExtra("userId");
+                        final String receiverRoom = getIntent().getStringExtra("userId") + auth.getUid();
+
+                        database.getReference().child("chats").child(senderRoom).push().setValue(model).addOnSuccessListener(aVoid -> {
+                            database.getReference().child("chats").child(receiverRoom).push().setValue(model);
+                            sendPushNotification(getIntent().getStringExtra("userId"), "Sent a document: " + fileName);
+                        });
+                    })).addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(ChatDetailActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }
             } else if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -384,6 +438,28 @@ public class ChatDetailActivity extends BaseActivity {
         cal.setTimeInMillis(timestamp);
         SimpleDateFormat formatter = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
         return formatter.format(cal.getTime());
+    }
+
+    private String getFileNameFromUri(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (index != -1) result = cursor.getString(index);
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            if (result != null) {
+                int cut = result.lastIndexOf('/');
+                if (cut != -1) {
+                    result = result.substring(cut + 1);
+                }
+            }
+        }
+        return result;
     }
 
     private String formatLastSeen(long timestamp) {

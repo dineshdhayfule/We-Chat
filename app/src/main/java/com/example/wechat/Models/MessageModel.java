@@ -1,7 +1,7 @@
 package com.example.wechat.Models;
 
 public class MessageModel {
-    String uId, message, messageId, imageUrl, repliedToMessage, repliedToSender, repliedToMessageId;
+    String uId, message, messageId, imageUrl, repliedToMessage, repliedToSender, repliedToMessageId, fileUrl, fileName, fileType;
     Long timeStamp;
     boolean isRead;
 
@@ -9,6 +9,32 @@ public class MessageModel {
         this.uId = uId;
         this.message = message;
         this.timeStamp = timeStamp;
+    }
+    
+    // ... (rest of constructors)
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     public MessageModel(String uId, String message) {
